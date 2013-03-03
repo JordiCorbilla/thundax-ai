@@ -27,4 +27,10 @@ package thundax.ai;
 requires
   rtl;
 
+contains
+  thundax.ai.spanningTree in 'lib\thundax.ai.spanningTree.pas',
+  thundax.ai.maths in 'lib\thundax.ai.maths.pas',
+  thundax.ai.coordenate in 'lib\thundax.ai.coordenate.pas',
+  thundax.ai.matrix in 'lib\thundax.ai.matrix.pas';
+
 end.

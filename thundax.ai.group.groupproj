@@ -1,0 +1,48 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{FD36EF21-5E73-4250-B728-2DFEA9387F7E}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="thundax.ai.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="projects\thundax.ai.testSpanningTree.dproj">
+				<Dependencies>thundax.ai.dproj</Dependencies>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="thundax_ai">
+			<MSBuild Projects="thundax.ai.dproj"/>
+		</Target>
+		<Target Name="thundax_ai:Clean">
+			<MSBuild Projects="thundax.ai.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="thundax_ai:Make">
+			<MSBuild Projects="thundax.ai.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="thundax_ai_testSpanningTree" DependsOnTargets="thundax.ai">
+			<MSBuild Projects="projects\thundax.ai.testSpanningTree.dproj"/>
+		</Target>
+		<Target Name="thundax_ai_testSpanningTree:Clean" DependsOnTargets="thundax.ai:Clean">
+			<MSBuild Projects="projects\thundax.ai.testSpanningTree.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="thundax_ai_testSpanningTree:Make" DependsOnTargets="thundax.ai:Make">
+			<MSBuild Projects="projects\thundax.ai.testSpanningTree.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="thundax_ai;thundax_ai_testSpanningTree"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="thundax_ai:Clean;thundax_ai_testSpanningTree:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="thundax_ai:Make;thundax_ai_testSpanningTree:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>
