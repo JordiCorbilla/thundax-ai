@@ -35,12 +35,17 @@ uses
 
 type
   TfrmSpanning = class(TForm)
-    Image1: TImage;
+    imgDisplay: TImage;
     btnFindMinimum: TButton;
     mLog: TMemo;
+    edtNumPoints: TEdit;
+    Label1: TLabel;
     procedure btnFindMinimumClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
-    procedure DrawCoordenate(const p1, p2 : TCoordenate);
+    FFirstTime : Boolean;
+    procedure MoveCoordenate(const p: TCoordenate);
+    procedure DrawCoordenate(const p: TCoordenate);
   public
     procedure FillInVertices(spanningTree: TSpanningTree);
     procedure Log(s: string);
@@ -52,7 +57,7 @@ var
 implementation
 
 uses
-  Diagnostics;
+  Diagnostics, thundax.ai.spanningTree.generator;
 
 {$R *.dfm}
 
@@ -60,81 +65,110 @@ procedure TfrmSpanning.btnFindMinimumClick(Sender: TObject);
 var
   spanningTree: TSpanningTree;
   st: TStopwatch;
-  minimumDistance : double;
+  minimumDistance: double;
+  layout: TLayoutGenerator;
+  cumulative : Int64;
 begin
   spanningTree := TSpanningTree.Create;
   try
+    if not FFirstTime then
+    begin
+      layout := TLayoutGenerator.Create(imgDisplay, StrToInt(edtNumPoints.text));
+      try
+        layout.Generate;
+      finally
+        FreeAndNil(layout);
+      end;
+    end;
+    FFirstTime := false;
+
     st := TStopwatch.StartNew;
     Log('Start Filling Vertices');
     FillInVertices(spanningTree);
+    cumulative := st.ElapsedMilliseconds;
     Log('Finish Filling Vertices. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
 
     st := TStopwatch.StartNew;
     Log('Start Calculating Adjacent List');
     spanningTree.CalculateAdjacentList;
+    cumulative := cumulative + st.ElapsedMilliseconds;
     Log('Finish Calculating Adjacent List. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
 
     st := TStopwatch.StartNew;
     Log('Start Calculating Minimum Spannig Tree');
-    minimumDistance := spanningTree.Minimum(DrawCoordenate);
+    minimumDistance := spanningTree.Minimum(MoveCoordenate, DrawCoordenate);
+    cumulative := cumulative + st.ElapsedMilliseconds;
     Log('Finish Calculating Minimum Spannig Tree. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
-    Log('Minimum Distance: ' + FloatToStr(minimumDistance));
+    Log('Minimum Distance: ' + FloatToStr(minimumDistance) + ' in ' + IntToStr(cumulative) + ' ms');
   finally
     FreeAndNil(spanningTree);
   end;
 end;
 
-procedure TfrmSpanning.DrawCoordenate(const p1, p2: TCoordenate);
+procedure TfrmSpanning.DrawCoordenate(const p: TCoordenate);
 var
-  randomColour : TColor;
-  value : integer;
+  randomColour: TColor;
+  value: integer;
 begin
   value := Random(4);
   randomColour := clRed;
   case value of
-    0: randomColour := clred;
-    1: randomColour := clBlue;
-    2: randomColour := clLime;
-    3: randomColour := clWhite;
+    0:
+      randomColour := clRed;
+    1:
+      randomColour := clBlue;
+    2:
+      randomColour := clLime;
+    3:
+      randomColour := clWhite;
   end;
-  image1.Canvas.Pen.Color := randomColour;
-  image1.Canvas.MoveTo(p1.x, p1.y);
-  image1.Canvas.LineTo(p2.x, p2.y);
+  imgDisplay.Canvas.Pen.Color := randomColour;
+  imgDisplay.Canvas.LineTo(p.x, p.y);
 end;
 
 procedure TfrmSpanning.FillInVertices(spanningTree: TSpanningTree);
 var
-  i: Integer;
-  j: Integer;
-  TransparentColor, color1: Integer;
+  i: integer;
+  j: integer;
+  TransparentColor, color1: integer;
   NewRect: TRect;
   vertices: TCoordenate;
 begin
-  color1 := Image1.Picture.Bitmap.Canvas.Pixels[0, 0];
-  for i := 0 to Image1.Picture.Bitmap.Width - 1 do
+  color1 := imgDisplay.Picture.Bitmap.Canvas.Pixels[0, 0];
+  for i := 0 to imgDisplay.Picture.Bitmap.Width - 1 do
   begin
-    for j := 0 to Image1.Picture.Bitmap.Height - 1 do
+    for j := 0 to imgDisplay.Picture.Bitmap.Height - 1 do
     begin
-      TransparentColor := Image1.Picture.Bitmap.Canvas.Pixels[i, j];
+      TransparentColor := imgDisplay.Picture.Bitmap.Canvas.Pixels[i, j];
       if color1 <> TransparentColor then
         spanningTree.AddVertice(i, j);
     end;
   end;
 
-  Image1.Canvas.Brush.Color := clFuchsia;
-  Image1.Canvas.Brush.Style := bsSolid;
-  Image1.Canvas.Pen.Color := clFuchsia;
+  imgDisplay.Canvas.Brush.Color := clFuchsia;
+  imgDisplay.Canvas.Brush.Style := bsSolid;
+  imgDisplay.Canvas.Pen.Color := clFuchsia;
 
   for vertices in spanningTree.vertices do
   begin
     NewRect := Rect(vertices.x - 2, vertices.y - 2, vertices.x + 2, vertices.y + 2);
-    Image1.Canvas.FillRect(NewRect);
+    imgDisplay.Canvas.FillRect(NewRect);
   end;
+end;
+
+procedure TfrmSpanning.FormCreate(Sender: TObject);
+begin
+  FFirstTime := true;
 end;
 
 procedure TfrmSpanning.Log(s: string);
 begin
   mLog.Lines.Add(DateTimeToStr(Now) + ' ' + s);
+end;
+
+procedure TfrmSpanning.MoveCoordenate(const p: TCoordenate);
+begin
+  imgDisplay.Canvas.MoveTo(p.x, p.y);
 end;
 
 end.

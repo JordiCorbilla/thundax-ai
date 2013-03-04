@@ -33,7 +33,7 @@ uses
   Contnrs, Generics.Collections, thundax.ai.coordenate, thundax.ai.matrix;
 
 type
-  TArg = reference to procedure(const p1, p2: TCoordenate);
+  TArg = reference to procedure(const p: TCoordenate);
 
   TSpanningTree = class(TObject)
   private
@@ -46,7 +46,7 @@ type
     destructor Destroy(); override;
     procedure AddVertice(x, y: Integer);
     procedure CalculateAdjacentList();
-    function Minimum(CallBack: TArg): Double;
+    function Minimum(CallBackP1: TArg; CallBackP2: TArg): Double;
   end;
 
 implementation
@@ -97,7 +97,7 @@ begin
   inherited;
 end;
 
-function TSpanningTree.Minimum(CallBack: TArg): Double;
+function TSpanningTree.Minimum(CallBackP1: TArg; CallBackP2: TArg): Double;
 var
   m, i, k, j: Integer;
   min, euclidianDistance: Double;
@@ -112,18 +112,19 @@ begin
 
   distance := 0.0;
   nearestVertex := 0;
-  for i := 1 to Fmatrix.Size - 1 do
+  for i := 0 to Fmatrix.Size - 1 do
   begin
     nearestPoint[i] := 1;
     distanceList[i] := Fmatrix.Cell[1, i];
   end;
 
   origin := Fvertices.Items[0];
-  j := 1;
+  CallBackP1(origin);
+  j := 0;
   for k := 0 to Fmatrix.Size - 1 do
   begin
     min := High(Integer);
-    for i := 1 to Fmatrix.Size - 1 do
+    for i := 0 to Fmatrix.Size - 1 do
     begin
       if (distanceList[i] >= 0) and (TMathHelper.Compare(min, distanceList[i], '>')) then
       begin
@@ -133,7 +134,7 @@ begin
     end;
 
     euclidianDistance := Fmatrix.Cell[nearestVertex, nearestPoint[nearestVertex]];
-    CallBack(origin, Fvertices.Items[nearestVertex]);
+    CallBackP2(Fvertices.Items[nearestVertex]);
 
     m := 0;
     for i := 0 to Fmatrix.Size - 1 do
@@ -150,9 +151,10 @@ begin
     distance := distance + TMathHelper.EuclideanDistance(Fvertices.Items[j], Fvertices.Items[nearestVertex]);
 
     origin := Fvertices.Items[j];
+    CallBackP1(origin);
 
     distanceList[nearestVertex] := -1;
-    for i := 1 to Fmatrix.Size - 1 do
+    for i := 0 to Fmatrix.Size - 1 do
       if TMathHelper.Compare(Fmatrix.Cell[i, nearestVertex], distanceList[i], '<') then
       begin
         distanceList[i] := Fmatrix.Cell[i, nearestVertex];
