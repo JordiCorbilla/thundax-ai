@@ -5,7 +5,7 @@ object frmSpanning: TfrmSpanning
   BorderStyle = bsSingle
   Caption = 'test Minimum Spanning Tree'
   ClientHeight = 512
-  ClientWidth = 1141
+  ClientWidth = 1151
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -149,9 +149,10 @@ object frmSpanning: TfrmSpanning
     0001800000018000000180000001800000018000000180000001FFFFFFFF}
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object Image1: TImage
+  object imgDisplay: TImage
     Left = 0
     Top = 0
     Width = 686
@@ -33189,21 +33190,37 @@ object frmSpanning: TfrmSpanning
       3705023705023705023705020000}
     ExplicitHeight = 476
   end
+  object Label1: TLabel
+    Left = 1038
+    Top = 13
+    Width = 82
+    Height = 13
+    Caption = 'Number of Points'
+  end
   object btnFindMinimum: TButton
-    Left = 752
+    Left = 692
     Top = 8
-    Width = 233
+    Width = 284
     Height = 25
-    Caption = 'Find Minimum'
+    Caption = 'Find Minimum Spanning Tree'
     TabOrder = 0
     OnClick = btnFindMinimumClick
   end
   object mLog: TMemo
     Left = 692
     Top = 39
-    Width = 445
+    Width = 455
     Height = 469
     ReadOnly = True
+    ScrollBars = ssVertical
     TabOrder = 1
+  end
+  object edtNumPoints: TEdit
+    Left = 982
+    Top = 10
+    Width = 50
+    Height = 21
+    TabOrder = 2
+    Text = '100'
   end
 end
