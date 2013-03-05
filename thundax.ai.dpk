@@ -33,6 +33,7 @@ contains
   thundax.ai.maths in 'lib\thundax.ai.maths.pas',
   thundax.ai.coordenate in 'lib\thundax.ai.coordenate.pas',
   thundax.ai.matrix in 'lib\thundax.ai.matrix.pas',
-  thundax.ai.spanningTree.generator in 'lib\thundax.ai.spanningTree.generator.pas';
+  thundax.ai.layout.generator in 'lib\thundax.ai.layout.generator.pas',
+  thundax.ai.convexHull in 'lib\thundax.ai.convexHull.pas';
 
 end.

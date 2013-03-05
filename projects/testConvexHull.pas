@@ -25,51 +25,52 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-unit testSpanningTree;
+unit testConvexHull;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls, thundax.ai.spanningTree, thundax.ai.coordenate;
+  Dialogs, StdCtrls, ExtCtrls, thundax.ai.convexHull, thundax.ai.coordenate;
 
 type
-  TfrmSpanning = class(TForm)
+  TfrmConvexHull = class(TForm)
     imgDisplay: TImage;
-    btnFindMinimum: TButton;
-    mLog: TMemo;
+    btnFindConvexHull: TButton;
     edtNumPoints: TEdit;
     Label1: TLabel;
-    procedure btnFindMinimumClick(Sender: TObject);
+    mLog: TMemo;
+    procedure btnFindConvexHullClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-    FFirstTime : Boolean;
-    procedure MoveCoordenate(const p: TCoordenate);
-    procedure DrawCoordenate(const p: TCoordenate);
-  public
-    procedure FillInVertices(spanningTree: TSpanningTree);
+    FFirstTime: Boolean;
     procedure Log(s: string);
+    procedure DrawLine(p1, p2: TCoordenate; colorLine: integer);
+  public
+    procedure FillInVertices(convexHull: TConvexHull);
   end;
 
 var
-  frmSpanning: TfrmSpanning;
+  frmConvexHull: TfrmConvexHull;
 
 implementation
 
 uses
-  Diagnostics, thundax.ai.layout.generator;
+  Diagnostics, thundax.ai.layout.generator, Contnrs, Generics.Collections;
 
 {$R *.dfm}
 
-procedure TfrmSpanning.btnFindMinimumClick(Sender: TObject);
+procedure TfrmConvexHull.btnFindConvexHullClick(Sender: TObject);
 var
-  spanningTree: TSpanningTree;
+  convexHull: TConvexHull;
   st: TStopwatch;
-  minimumDistance: double;
   layout: TLayoutGenerator;
-  cumulative : Int64;
+  cumulative: Int64;
+  closurePoints: TObjectList<TCoordenate>;
+  i: integer;
 begin
-  spanningTree := TSpanningTree.Create;
+  convexHull := TConvexHull.Create;
+  closurePoints := nil;
   try
     if not FFirstTime then
     begin
@@ -84,49 +85,41 @@ begin
 
     st := TStopwatch.StartNew;
     Log('Start Filling Vertices');
-    FillInVertices(spanningTree);
+    FillInVertices(convexHull);
     cumulative := st.ElapsedMilliseconds;
     Log('Finish Filling Vertices. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
 
     st := TStopwatch.StartNew;
-    Log('Start Calculating Adjacent List');
-    spanningTree.CalculateAdjacentList;
+    Log('Start Calculating Convex Hull');
+    closurePoints := convexHull.Chain();
     cumulative := cumulative + st.ElapsedMilliseconds;
-    Log('Finish Calculating Adjacent List. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
+    Log('Finish Calculating Convex Hull. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
 
     st := TStopwatch.StartNew;
-    Log('Start Calculating Minimum Spannig Tree');
-    minimumDistance := spanningTree.Minimum(MoveCoordenate, DrawCoordenate);
+    Log('Start Displaying Closure');
+    for i := 0 to closurePoints.Count - 2 do
+      DrawLine(closurePoints.Items[i], closurePoints.Items[i + 1], clred);
     cumulative := cumulative + st.ElapsedMilliseconds;
-    Log('Finish Calculating Minimum Spannig Tree. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
-    Log('Minimum Distance: ' + FloatToStr(minimumDistance) + ' in ' + IntToStr(cumulative) + ' ms');
+    Log('Finish Displaying Closure. Ellapsed time ' + IntToStr(st.ElapsedMilliseconds) + ' ms');
+    Log('Total time in ' + IntToStr(cumulative) + ' ms');
+
   finally
-    FreeAndNil(spanningTree);
+    closurePoints.Free;
+    convexHull.Free;
   end;
 end;
 
-procedure TfrmSpanning.DrawCoordenate(const p: TCoordenate);
-var
-  randomColour: TColor;
-  value: integer;
+procedure TfrmConvexHull.DrawLine(p1: TCoordenate; p2: TCoordenate; colorLine: integer);
 begin
-  value := Random(4);
-  randomColour := clRed;
-  case value of
-    0:
-      randomColour := clRed;
-    1:
-      randomColour := clBlue;
-    2:
-      randomColour := clLime;
-    3:
-      randomColour := clWhite;
-  end;
-  imgDisplay.Canvas.Pen.Color := randomColour;
-  imgDisplay.Canvas.LineTo(p.x, p.y);
+  imgDisplay.Canvas.Brush.Style := bsSolid;
+  imgDisplay.Canvas.Brush.Color := colorLine;
+  imgDisplay.Canvas.Pen.Width := 1;
+  imgDisplay.Canvas.Pen.Color := colorLine;
+  imgDisplay.Canvas.MoveTo(p1.x, p1.y);
+  imgDisplay.Canvas.LineTo(p2.x, p2.y);
 end;
 
-procedure TfrmSpanning.FillInVertices(spanningTree: TSpanningTree);
+procedure TfrmConvexHull.FillInVertices(convexHull: TConvexHull);
 var
   i: integer;
   j: integer;
@@ -141,7 +134,7 @@ begin
     begin
       TransparentColor := imgDisplay.Picture.Bitmap.Canvas.Pixels[i, j];
       if color1 <> TransparentColor then
-        spanningTree.AddVertice(i, j);
+        convexHull.AddVertice(i, j);
     end;
   end;
 
@@ -149,26 +142,21 @@ begin
   imgDisplay.Canvas.Brush.Style := bsSolid;
   imgDisplay.Canvas.Pen.Color := clFuchsia;
 
-  for vertices in spanningTree.vertices do
+  for vertices in convexHull.vertices do
   begin
     NewRect := Rect(vertices.x - 2, vertices.y - 2, vertices.x + 2, vertices.y + 2);
     imgDisplay.Canvas.FillRect(NewRect);
   end;
 end;
 
-procedure TfrmSpanning.FormCreate(Sender: TObject);
+procedure TfrmConvexHull.FormCreate(Sender: TObject);
 begin
   FFirstTime := true;
 end;
 
-procedure TfrmSpanning.Log(s: string);
+procedure TfrmConvexHull.Log(s: string);
 begin
   mLog.Lines.Add(DateTimeToStr(Now) + ' ' + s);
-end;
-
-procedure TfrmSpanning.MoveCoordenate(const p: TCoordenate);
-begin
-  imgDisplay.Canvas.MoveTo(p.x, p.y);
 end;
 
 end.

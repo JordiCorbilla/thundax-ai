@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-unit thundax.ai.spanningTree.generator;
+unit thundax.ai.layout.generator;
 
 interface
 
@@ -68,7 +68,6 @@ end;
 
 procedure TLayoutGenerator.Generate;
 var
-  num: integer;
   i, int1, int2: integer;
   pixColour: TColor;
 begin
