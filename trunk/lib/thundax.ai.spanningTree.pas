@@ -67,7 +67,7 @@ var
   p1, p2: TCoordenate;
   FAdjacentMatrix: TMatrix;
 begin
-  FAdjacentMatrix := TMatrix.Create(Fvertices.count);
+  FAdjacentMatrix := TMatrix.Create(Fvertices.count, Fvertices.count);
   try
     for i := 0 to Fvertices.count - 1 do
     begin
@@ -107,12 +107,12 @@ var
   nearestPoint: array of Integer;
   origin: TCoordenate;
 begin
-  SetLength(distanceList, Fmatrix.Size);
-  SetLength(nearestPoint, Fmatrix.Size);
+  SetLength(distanceList, Fmatrix.Columns);
+  SetLength(nearestPoint, Fmatrix.Columns);
 
   distance := 0.0;
   nearestVertex := 0;
-  for i := 0 to Fmatrix.Size - 1 do
+  for i := 0 to Fmatrix.Columns - 1 do
   begin
     nearestPoint[i] := 1;
     distanceList[i] := Fmatrix.Cell[1, i];
@@ -121,10 +121,10 @@ begin
   origin := Fvertices.Items[0];
   CallBackP1(origin);
   j := 0;
-  for k := 0 to Fmatrix.Size - 1 do
+  for k := 0 to Fmatrix.Columns - 1 do
   begin
     min := High(Integer);
-    for i := 0 to Fmatrix.Size - 1 do
+    for i := 0 to Fmatrix.Columns - 1 do
     begin
       if (distanceList[i] >= 0) and (TMathHelper.Compare(min, distanceList[i], '>')) then
       begin
@@ -137,7 +137,7 @@ begin
     CallBackP2(Fvertices.Items[nearestVertex]);
 
     m := 0;
-    for i := 0 to Fmatrix.Size - 1 do
+    for i := 0 to Fmatrix.Columns - 1 do
     begin
       if (TMathHelper.Compare(Fmatrix.Cell[i, nearestVertex], euclidianDistance, '=')) then
       begin
@@ -154,7 +154,7 @@ begin
     CallBackP1(origin);
 
     distanceList[nearestVertex] := -1;
-    for i := 0 to Fmatrix.Size - 1 do
+    for i := 0 to Fmatrix.Columns - 1 do
       if TMathHelper.Compare(Fmatrix.Cell[i, nearestVertex], distanceList[i], '<') then
       begin
         distanceList[i] := Fmatrix.Cell[i, nearestVertex];

@@ -12,6 +12,9 @@
 			<Projects Include="projects\thundax.ai.testConvexHull.dproj">
 				<Dependencies>thundax.ai.dproj</Dependencies>
 			</Projects>
+			<Projects Include="projects\thundax.ai.testMatrix.dproj">
+				<Dependencies>thundax.ai.dproj</Dependencies>
+			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -47,14 +50,23 @@
 		<Target Name="thundax_ai_testConvexHull:Make" DependsOnTargets="thundax.ai:Make">
 			<MSBuild Projects="projects\thundax.ai.testConvexHull.dproj" Targets="Make"/>
 		</Target>
+		<Target Name="thundax_ai_testMatrix" DependsOnTargets="thundax.ai">
+			<MSBuild Projects="projects\thundax.ai.testMatrix.dproj"/>
+		</Target>
+		<Target Name="thundax_ai_testMatrix:Clean" DependsOnTargets="thundax.ai:Clean">
+			<MSBuild Projects="projects\thundax.ai.testMatrix.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="thundax_ai_testMatrix:Make" DependsOnTargets="thundax.ai:Make">
+			<MSBuild Projects="projects\thundax.ai.testMatrix.dproj" Targets="Make"/>
+		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="thundax_ai;thundax_ai_testSpanningTree;thundax_ai_testConvexHull"/>
+			<CallTarget Targets="thundax_ai;thundax_ai_testSpanningTree;thundax_ai_testConvexHull;thundax_ai_testMatrix"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="thundax_ai:Clean;thundax_ai_testSpanningTree:Clean;thundax_ai_testConvexHull:Clean"/>
+			<CallTarget Targets="thundax_ai:Clean;thundax_ai_testSpanningTree:Clean;thundax_ai_testConvexHull:Clean;thundax_ai_testMatrix:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="thundax_ai:Make;thundax_ai_testSpanningTree:Make;thundax_ai_testConvexHull:Make"/>
+			<CallTarget Targets="thundax_ai:Make;thundax_ai_testSpanningTree:Make;thundax_ai_testConvexHull:Make;thundax_ai_testMatrix:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>
