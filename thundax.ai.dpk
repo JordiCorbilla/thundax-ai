@@ -34,6 +34,9 @@ contains
   thundax.ai.coordenate in 'lib\thundax.ai.coordenate.pas',
   thundax.ai.matrix in 'lib\thundax.ai.matrix.pas',
   thundax.ai.layout.generator in 'lib\thundax.ai.layout.generator.pas',
-  thundax.ai.convexHull in 'lib\thundax.ai.convexHull.pas';
+  thundax.ai.convexHull in 'lib\thundax.ai.convexHull.pas',
+  thundax.ai.matrix.columns in 'lib\thundax.ai.matrix.columns.pas',
+  thundax.ai.matrix.bind in 'lib\thundax.ai.matrix.bind.pas',
+  thundax.ai.matrix.arraytypes in 'lib\thundax.ai.matrix.arraytypes.pas';
 
 end.

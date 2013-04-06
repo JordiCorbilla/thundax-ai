@@ -29,35 +29,61 @@ unit thundax.ai.matrix;
 
 interface
 
+uses
+  thundax.ai.matrix.arraytypes;
+
 type
   TMultiArray = Array of array of Double;
 
   TMatrix = class(TObject)
   private
-    FSize: Integer;
+    FColumns: Integer;
+    FRows : Integer;
     FMultiArray: TMultiArray;
     function GetCell(x, y: Integer): Double;
     procedure SetCell(x, y: Integer; const Value: Double);
   public
-    constructor Create(size: Integer);
+    constructor Create(Columns, Rows : Integer); overload;
+    constructor Create(Columns : TArrayColumns); overload;
     procedure Initialise();
-    property size: Integer read FSize write FSize;
+    property Columns: Integer read FColumns write FColumns;
+    property Rows: Integer read FRows write FRows;
     function Transpose(): TMatrix;
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
+    function ToString() : string;
   end;
 
 implementation
 
+uses
+  SysUtils, thundax.ai.matrix.Columns;
+
 { TMatrix }
 
-constructor TMatrix.Create(size: Integer);
+constructor TMatrix.Create(Columns, Rows : Integer);
 var
   i: Integer;
 begin
-  FSize := size;
-  SetLength(FMultiArray, size);
-  for i := 0 to size - 1 do
-    SetLength(FMultiArray[i], size);
+  FRows := Rows;
+  FColumns := Columns;
+  SetLength(FMultiArray, FRows);
+  for i := 0 to FRows - 1 do
+    SetLength(FMultiArray[i], FColumns);
+end;
+
+constructor TMatrix.Create(Columns: TArrayColumns);
+var
+  i, j: Integer;
+begin
+  FRows := High(Columns[0].Values)+1;
+  FColumns := High(Columns)+1;
+  SetLength(FMultiArray, FRows);
+  for i := 0 to FRows - 1 do
+    SetLength(FMultiArray[i], FColumns);
+
+  for i := 0 to FRows-1 do
+    for j := 0 to FColumns-1 do
+      SetCell(i,j,Columns[i].Values[j]);
 end;
 
 function TMatrix.GetCell(x, y: Integer): Double;
@@ -81,14 +107,30 @@ begin
   FMultiArray[x, y] := Value;
 end;
 
+function TMatrix.ToString: string;
+var
+  i, j: Integer;
+  sLine, sRowLine : string;
+begin
+  sRowLine := '';
+  for i := 0 to Self.FRows - 1 do
+  begin
+    sLine := '';
+    for j := 0 to Self.FColumns - 1 do
+      sLine := sLine + FloatToStr(FMultiArray[j, i]) + '    ';
+    sRowLine := sRowLine + sLine + sLineBreak;
+  end;
+  result := sRowLine;
+end;
+
 function TMatrix.Transpose: TMatrix;
 var
   trasposed: TMatrix;
   i, j: Integer;
 begin
-  trasposed := TMatrix.Create(Self.FSize);
-  for i := 0 to Self.FSize - 1 do
-    for j := 0 to Self.FSize - 1 do
+  trasposed := TMatrix.Create(Self.FRows, Self.FColumns);
+  for i := 0 to Self.FRows - 1 do
+    for j := 0 to Self.FColumns - 1 do
       trasposed.Cell[i, j] := FMultiArray[j, i];
   result := trasposed;
 end;

@@ -1,12 +1,12 @@
 ﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 		<PropertyGroup>
-			<ProjectGuid>{BF3C57AF-89D5-49DF-8A59-F43E19812E38}</ProjectGuid>
-			<MainSource>thundax.ai.dpk</MainSource>
+			<ProjectGuid>{76FE97A3-00C3-4F69-9A04-95EB2B87FB69}</ProjectGuid>
+			<MainSource>thundax.ai.testMatrix.dpr</MainSource>
 			<ProjectVersion>12.2</ProjectVersion>
 			<Base>True</Base>
 			<Config Condition="'$(Config)'==''">Debug</Config>
 			<Platform>Win32</Platform>
-			<AppType>Package</AppType>
+			<AppType>Application</AppType>
 			<FrameworkType>VCL</FrameworkType>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
 		</PropertyGroup>
@@ -24,23 +24,23 @@
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
-			<GenPackage>true</GenPackage>
-			<DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
 			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
 			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
-			<DCC_CBuilderOutput>All</DCC_CBuilderOutput>
+			<DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
 			<DCC_E>false</DCC_E>
-			<DCC_S>false</DCC_S>
-			<GenDll>true</GenDll>
 			<DCC_N>false</DCC_N>
+			<DCC_S>false</DCC_S>
 			<DCC_F>false</DCC_F>
 			<DCC_K>false</DCC_K>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_1)'!=''">
-			<DCC_DcuOutput>dcu\</DCC_DcuOutput>
-			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_ExeOutput>.</DCC_ExeOutput>
 			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_DcuOutput>dcu\</DCC_DcuOutput>
 			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+			<DCC_UnitSearchPath>C:\Desk\OpenSource Projects\thundax-ai\lib;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_2)'!=''">
 			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -49,20 +49,12 @@
 			<DCC_DebugInformation>false</DCC_DebugInformation>
 		</PropertyGroup>
 		<ItemGroup>
-			<DelphiCompile Include="thundax.ai.dpk">
+			<DelphiCompile Include="thundax.ai.testMatrix.dpr">
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
-			<DCCReference Include="rtl.dcp"/>
-			<DCCReference Include="vcl.dcp"/>
-			<DCCReference Include="lib\thundax.ai.spanningTree.pas"/>
-			<DCCReference Include="lib\thundax.ai.maths.pas"/>
-			<DCCReference Include="lib\thundax.ai.coordenate.pas"/>
-			<DCCReference Include="lib\thundax.ai.matrix.pas"/>
-			<DCCReference Include="lib\thundax.ai.layout.generator.pas"/>
-			<DCCReference Include="lib\thundax.ai.convexHull.pas"/>
-			<DCCReference Include="lib\thundax.ai.matrix.columns.pas"/>
-			<DCCReference Include="lib\thundax.ai.matrix.bind.pas"/>
-			<DCCReference Include="lib\thundax.ai.matrix.arraytypes.pas"/>
+			<DCCReference Include="testMatrix.pas">
+				<Form>Form1</Form>
+			</DCCReference>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -79,14 +71,11 @@
 		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj"/>
 		<ProjectExtensions>
 			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
-			<Borland.ProjectType>Package</Borland.ProjectType>
+			<Borland.ProjectType/>
 			<BorlandProject>
 				<Delphi.Personality>
-					<Source>
-						<Source Name="MainSource">thundax.ai.dpk</Source>
-					</Source>
 					<VersionInfo>
-						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
 						<VersionInfo Name="MajorVer">1</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
@@ -101,17 +90,20 @@
 						<VersionInfo Name="CodePage">1252</VersionInfo>
 					</VersionInfo>
 					<VersionInfoKeys>
-						<VersionInfoKeys Name="CompanyName">Jordi Corbilla</VersionInfoKeys>
-						<VersionInfoKeys Name="FileDescription">Jordi Corbilla</VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
 						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
-						<VersionInfoKeys Name="InternalName">Jordi Corbilla</VersionInfoKeys>
-						<VersionInfoKeys Name="LegalCopyright">Jordi Corbilla</VersionInfoKeys>
-						<VersionInfoKeys Name="LegalTrademarks">Jordi Corbilla</VersionInfoKeys>
-						<VersionInfoKeys Name="OriginalFilename">Jordi Corbilla</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductName">Jordi Corbilla</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
 						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
-						<VersionInfoKeys Name="Comments">Jordi Corbilla</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>
+					<Source>
+						<Source Name="MainSource">thundax.ai.testMatrix.dpr</Source>
+					</Source>
 				</Delphi.Personality>
 				<Platforms>
 					<Platform value="Win32">True</Platform>
