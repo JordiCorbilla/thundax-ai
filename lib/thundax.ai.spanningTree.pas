@@ -38,7 +38,7 @@ type
   TSpanningTree = class(TObject)
   private
     Fvertices: TObjectList<TCoordenate>;
-    Fmatrix: TMatrix;
+    Fmatrix: IMatrix;
     procedure Setvertices(const Value: TObjectList<TCoordenate>);
   public
     property vertices: TObjectList<TCoordenate>read Fvertices write Setvertices;
@@ -65,7 +65,7 @@ procedure TSpanningTree.CalculateAdjacentList;
 var
   i, j: Integer;
   p1, p2: TCoordenate;
-  FAdjacentMatrix: TMatrix;
+  FAdjacentMatrix: IMatrix;
 begin
   FAdjacentMatrix := TMatrix.Create(Fvertices.count, Fvertices.count);
   try
@@ -80,7 +80,6 @@ begin
     end;
   finally
     Fmatrix := FAdjacentMatrix.Transpose;
-    FreeAndNil(FAdjacentMatrix);
   end;
 end;
 
@@ -92,8 +91,6 @@ end;
 destructor TSpanningTree.Destroy;
 begin
   FreeAndNil(Fvertices);
-  if Assigned(Fmatrix) then
-    FreeAndNil(Fmatrix);
   inherited;
 end;
 

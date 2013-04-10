@@ -15,9 +15,9 @@ object Form1: TForm1
   TextHeight = 13
   object Memo1: TMemo
     Left = 8
-    Top = 176
+    Top = 39
     Width = 744
-    Height = 239
+    Height = 376
     TabOrder = 0
   end
   object Button1: TButton

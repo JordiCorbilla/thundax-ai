@@ -6,7 +6,7 @@ uses
   thundax.ai.matrix.columns;
 
 type
-  TArrayColumns = array of TColumn;
+  TArrayColumns = array of IColumn;
 
 implementation
 
