@@ -35,22 +35,35 @@ uses
 type
   TMultiArray = Array of array of Double;
 
-  TMatrix = class(TObject)
+  IMatrix = interface
+    function GetCell(x, y: Integer): Double;
+    procedure SetCell(x, y: Integer; const Value: Double);
+    function GetColumns() : Integer;
+    procedure SetColumns(value : Integer);
+    function ToString() : string;
+    function Transpose(): IMatrix;
+    property Cell[x, y: Integer]: Double read GetCell write SetCell;
+    property Columns: Integer read GetColumns write SetColumns;
+  end;
+
+  TMatrix = class(TInterfacedObject, IMatrix)
   private
     FColumns: Integer;
     FRows : Integer;
     FMultiArray: TMultiArray;
     function GetCell(x, y: Integer): Double;
     procedure SetCell(x, y: Integer; const Value: Double);
+    function GetColumns() : Integer;
+    procedure SetColumns(value : Integer);
   public
     constructor Create(Columns, Rows : Integer); overload;
     constructor Create(Columns : TArrayColumns); overload;
     procedure Initialise();
-    property Columns: Integer read FColumns write FColumns;
+    property Columns: Integer read GetColumns write SetColumns;
     property Rows: Integer read FRows write FRows;
-    function Transpose(): TMatrix;
+    function Transpose(): IMatrix;
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
-    function ToString() : string;
+    function ToString() : string; override;
   end;
 
 implementation
@@ -66,9 +79,9 @@ var
 begin
   FRows := Rows;
   FColumns := Columns;
-  SetLength(FMultiArray, FRows);
-  for i := 0 to FRows - 1 do
-    SetLength(FMultiArray[i], FColumns);
+  SetLength(FMultiArray, FColumns);
+  for i := 0 to FColumns - 1 do
+    SetLength(FMultiArray[i], FRows);
 end;
 
 constructor TMatrix.Create(Columns: TArrayColumns);
@@ -77,18 +90,23 @@ var
 begin
   FRows := High(Columns[0].Values)+1;
   FColumns := High(Columns)+1;
-  SetLength(FMultiArray, FRows);
-  for i := 0 to FRows - 1 do
-    SetLength(FMultiArray[i], FColumns);
+  SetLength(FMultiArray, FColumns);
+  for i := 0 to FColumns - 1 do
+    SetLength(FMultiArray[i], FRows);
 
-  for i := 0 to FRows-1 do
-    for j := 0 to FColumns-1 do
+  for i := 0 to FColumns-1 do
+    for j := 0 to FRows-1 do
       SetCell(i,j,Columns[i].Values[j]);
 end;
 
 function TMatrix.GetCell(x, y: Integer): Double;
 begin
   Result := FMultiArray[x, y];
+end;
+
+function TMatrix.GetColumns: Integer;
+begin
+  result := FColumns;
 end;
 
 procedure TMatrix.Initialise;
@@ -107,6 +125,11 @@ begin
   FMultiArray[x, y] := Value;
 end;
 
+procedure TMatrix.SetColumns(value: Integer);
+begin
+  FColumns := value;
+end;
+
 function TMatrix.ToString: string;
 var
   i, j: Integer;
@@ -123,9 +146,9 @@ begin
   result := sRowLine;
 end;
 
-function TMatrix.Transpose: TMatrix;
+function TMatrix.Transpose: IMatrix;
 var
-  trasposed: TMatrix;
+  trasposed: IMatrix;
   i, j: Integer;
 begin
   trasposed := TMatrix.Create(Self.FRows, Self.FColumns);
