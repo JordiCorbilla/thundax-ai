@@ -40,10 +40,15 @@ type
     procedure SetCell(x, y: Integer; const Value: Double);
     function GetColumns() : Integer;
     procedure SetColumns(value : Integer);
+    function GetRows() : Integer;
+    procedure SetRows(value : Integer);
     function ToString() : string;
     function Transpose(): IMatrix;
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
+    property Rows: Integer read GetRows write SetRows;
     property Columns: Integer read GetColumns write SetColumns;
+    function Add(matrix : IMatrix) : IMatrix;
+    function Substract(matrix : IMatrix) : Imatrix;
   end;
 
   TMatrix = class(TInterfacedObject, IMatrix)
@@ -55,14 +60,18 @@ type
     procedure SetCell(x, y: Integer; const Value: Double);
     function GetColumns() : Integer;
     procedure SetColumns(value : Integer);
+    function GetRows() : Integer;
+    procedure SetRows(value : Integer);
   public
     constructor Create(Columns, Rows : Integer); overload;
     constructor Create(Columns : TArrayColumns); overload;
     procedure Initialise();
     property Columns: Integer read GetColumns write SetColumns;
-    property Rows: Integer read FRows write FRows;
+    property Rows: Integer read GetRows write SetRows;
     function Transpose(): IMatrix;
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
+    function Add(matrix : IMatrix) : IMatrix;
+    function Substract(matrix : IMatrix) : Imatrix;
     function ToString() : string; override;
   end;
 
@@ -82,6 +91,22 @@ begin
   SetLength(FMultiArray, FColumns);
   for i := 0 to FColumns - 1 do
     SetLength(FMultiArray[i], FRows);
+end;
+
+function TMatrix.Add(matrix: IMatrix): IMatrix;
+var
+  i, j : integer;
+  newMatrix : IMatrix;
+begin
+  if (Self.FRows <> matrix.Rows) or (Self.FColumns <> matrix.Columns) then
+    raise Exception.Create('Dimension matrix are different');
+
+  newMatrix := TMatrix.Create(matrix.Columns, matrix.Rows);
+  for i := 0 to FColumns-1 do
+    for j := 0 to FRows-1 do
+      newMatrix.Cell[i, j] := Self.Cell[i,j] + matrix.Cell[i,j];
+
+  result := newMatrix;
 end;
 
 constructor TMatrix.Create(Columns: TArrayColumns);
@@ -109,6 +134,11 @@ begin
   result := FColumns;
 end;
 
+function TMatrix.GetRows: Integer;
+begin
+  result := FRows;
+end;
+
 procedure TMatrix.Initialise;
 var
   i: Integer;
@@ -128,6 +158,27 @@ end;
 procedure TMatrix.SetColumns(value: Integer);
 begin
   FColumns := value;
+end;
+
+procedure TMatrix.SetRows(value: Integer);
+begin
+  FRows := value;
+end;
+
+function TMatrix.Substract(matrix: IMatrix): Imatrix;
+var
+  i, j : integer;
+  newMatrix : IMatrix;
+begin
+  if (Self.FRows <> matrix.Rows) or (Self.FColumns <> matrix.Columns) then
+    raise Exception.Create('Dimension matrix are different');
+
+  newMatrix := TMatrix.Create(matrix.Columns, matrix.Rows);
+  for i := 0 to FColumns-1 do
+    for j := 0 to FRows-1 do
+      newMatrix.Cell[i, j] := Self.Cell[i,j] - matrix.Cell[i,j];
+
+  result := newMatrix;
 end;
 
 function TMatrix.ToString: string;
