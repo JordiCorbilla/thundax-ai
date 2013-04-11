@@ -31,7 +31,7 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
   matrix : IMatrix;
   c1, c2, c3 : IColumn;
-  bind : IBind;
+  bind, bind1, bind2 : IBind;
 begin
   c1 := TColumn.create([1,2]);
   c2 := TColumn.create([4,5]);
@@ -45,6 +45,15 @@ begin
 
   Memo1.Lines.Add(TBind.New([TColumn.create([1,2,3,4,5]), TColumn.create([1,2,3,4,5]), TColumn.create([1,2,3,4,5]), TColumn.create([1,2,3,4,5])]).matrix.ToString);
   Memo1.Lines.Add(TBind.New([TColumn.create([1,2,3,4,5]), TColumn.create([1,2,3,4,5]), TColumn.create([1,2,3,4,5]), TColumn.create([1,2,3,4,5])]).matrix.transpose.ToString);
+
+  bind1 := TBind.New([TColumn.create([1,2]), TColumn.create([3,4])]);
+  bind2 := TBind.New([TColumn.create([5,6]), TColumn.create([7,8])]);
+
+  Memo1.Lines.Add(bind1.matrix.ToString);
+  Memo1.Lines.Add(bind2.matrix.ToString);
+  Memo1.Lines.Add(bind1.matrix.Add(bind2.matrix).ToString);
+  Memo1.Lines.Add(bind1.matrix.Substract(bind2.matrix).ToString);
+
 end;
 
 end.
