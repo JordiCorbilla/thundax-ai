@@ -49,6 +49,7 @@ type
     property Columns: Integer read GetColumns write SetColumns;
     function Add(matrix : IMatrix) : IMatrix;
     function Substract(matrix : IMatrix) : Imatrix;
+    function Multiply(matrix : IMatrix) : Imatrix;
   end;
 
   TMatrix = class(TInterfacedObject, IMatrix)
@@ -72,6 +73,7 @@ type
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
     function Add(matrix : IMatrix) : IMatrix;
     function Substract(matrix : IMatrix) : Imatrix;
+    function Multiply(matrix : IMatrix) : Imatrix;
     function ToString() : string; override;
   end;
 
@@ -148,6 +150,32 @@ begin
     FMultiArray[0, i] := i;
     FMultiArray[i, 0] := i;
   end;
+end;
+
+function TMatrix.Multiply(matrix: IMatrix): Imatrix;
+var
+  i, j, k : integer;
+  newMatrix : IMatrix;
+  sum : double;
+begin
+  if (Self.FRows <> matrix.Rows) or (Self.FColumns <> matrix.Columns) then
+    raise Exception.Create('Dimension matrix are different');
+
+  newMatrix := TMatrix.Create(matrix.Columns, matrix.Rows);
+  for i := 0 to FColumns-1 do
+  begin
+    for j := 0 to matrix.Rows-1 do
+    begin
+      sum := 0;
+      for k := 0 to FRows-1 do
+      begin
+        sum := sum + Self.Cell[k,j]*matrix.Cell[i,k];
+      end;
+      newMatrix.Cell[i, j] := sum;
+    end;
+  end;
+
+  result := newMatrix;
 end;
 
 procedure TMatrix.SetCell(x, y: Integer; const Value: Double);
