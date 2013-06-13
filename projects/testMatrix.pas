@@ -59,7 +59,7 @@ begin
   Memo1.Lines.Add(bind2.matrix.ToString);
   Memo1.Lines.Add(bind1.matrix.Multiply(bind2.matrix).ToString);
   Memo1.Lines.Add(bind1.matrix.Add(bind2.matrix).ToString);
-  Memo1.Lines.Add(bind1.matrix.Substract(bind2.matrix).ToString);
+  Memo1.Lines.Add(bind1.matrix.Subtract(bind2.matrix).ToString);
 
 end;
 
