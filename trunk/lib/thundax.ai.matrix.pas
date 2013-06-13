@@ -48,7 +48,7 @@ type
     property Rows: Integer read GetRows write SetRows;
     property Columns: Integer read GetColumns write SetColumns;
     function Add(matrix: IMatrix): IMatrix;
-    function Substract(matrix: IMatrix): IMatrix;
+    function Subtract(matrix: IMatrix): IMatrix;
     function Multiply(matrix: IMatrix): IMatrix;
     function Mean(): IMatrix;
     function Covariance(): IMatrix;
@@ -75,7 +75,7 @@ type
     function Transpose(): IMatrix;
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
     function Add(matrix: IMatrix): IMatrix;
-    function Substract(matrix: IMatrix): IMatrix;
+    function Subtract(matrix: IMatrix): IMatrix;
     function Multiply(matrix: IMatrix): IMatrix;
     function Mean(): IMatrix;
     function GetCovarianceValue(Column, Row: Integer): Double;
@@ -256,7 +256,7 @@ begin
   FRows := Value;
 end;
 
-function TMatrix.Substract(matrix: IMatrix): IMatrix;
+function TMatrix.Subtract(matrix: IMatrix): IMatrix;
 var
   i, j: Integer;
   newMatrix: IMatrix;
@@ -282,7 +282,6 @@ var
 begin
   sRowLine := '';
   // First get the max colum length
-  maxLength := 0;
   vector := TVector<Integer>.Create(Self.FColumns);
   for j := 0 to Self.FColumns - 1 do
   begin
