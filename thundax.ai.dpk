@@ -37,6 +37,7 @@ contains
   thundax.ai.convexHull in 'lib\thundax.ai.convexHull.pas',
   thundax.ai.matrix.columns in 'lib\thundax.ai.matrix.columns.pas',
   thundax.ai.matrix.bind in 'lib\thundax.ai.matrix.bind.pas',
-  thundax.ai.matrix.arraytypes in 'lib\thundax.ai.matrix.arraytypes.pas';
+  thundax.ai.matrix.arraytypes in 'lib\thundax.ai.matrix.arraytypes.pas',
+  thundax.ai.vector in 'lib\thundax.ai.vector.pas';
 
 end.

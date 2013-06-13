@@ -38,53 +38,59 @@ type
   IMatrix = interface
     function GetCell(x, y: Integer): Double;
     procedure SetCell(x, y: Integer; const Value: Double);
-    function GetColumns() : Integer;
-    procedure SetColumns(value : Integer);
-    function GetRows() : Integer;
-    procedure SetRows(value : Integer);
-    function ToString() : string;
+    function GetColumns(): Integer;
+    procedure SetColumns(Value: Integer);
+    function GetRows(): Integer;
+    procedure SetRows(Value: Integer);
+    function ToString(): string;
     function Transpose(): IMatrix;
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
     property Rows: Integer read GetRows write SetRows;
     property Columns: Integer read GetColumns write SetColumns;
-    function Add(matrix : IMatrix) : IMatrix;
-    function Substract(matrix : IMatrix) : Imatrix;
-    function Multiply(matrix : IMatrix) : Imatrix;
+    function Add(matrix: IMatrix): IMatrix;
+    function Substract(matrix: IMatrix): IMatrix;
+    function Multiply(matrix: IMatrix): IMatrix;
+    function Mean(): IMatrix;
+    function Covariance(): IMatrix;
+    function GetCovarianceValue(Column, Row: Integer): Double;
   end;
 
   TMatrix = class(TInterfacedObject, IMatrix)
   private
     FColumns: Integer;
-    FRows : Integer;
+    FRows: Integer;
     FMultiArray: TMultiArray;
     function GetCell(x, y: Integer): Double;
     procedure SetCell(x, y: Integer; const Value: Double);
-    function GetColumns() : Integer;
-    procedure SetColumns(value : Integer);
-    function GetRows() : Integer;
-    procedure SetRows(value : Integer);
+    function GetColumns(): Integer;
+    procedure SetColumns(Value: Integer);
+    function GetRows(): Integer;
+    procedure SetRows(Value: Integer);
   public
-    constructor Create(Columns, Rows : Integer); overload;
-    constructor Create(Columns : TArrayColumns); overload;
+    constructor Create(Columns, Rows: Integer); overload;
+    constructor Create(Columns: TArrayColumns); overload;
     procedure Initialise();
     property Columns: Integer read GetColumns write SetColumns;
     property Rows: Integer read GetRows write SetRows;
     function Transpose(): IMatrix;
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
-    function Add(matrix : IMatrix) : IMatrix;
-    function Substract(matrix : IMatrix) : Imatrix;
-    function Multiply(matrix : IMatrix) : Imatrix;
-    function ToString() : string; override;
+    function Add(matrix: IMatrix): IMatrix;
+    function Substract(matrix: IMatrix): IMatrix;
+    function Multiply(matrix: IMatrix): IMatrix;
+    function Mean(): IMatrix;
+    function GetCovarianceValue(Column, Row: Integer): Double;
+    function Covariance(): IMatrix;
+    function ToString(): string; override;
   end;
 
 implementation
 
 uses
-  SysUtils, thundax.ai.matrix.Columns;
+  SysUtils, thundax.ai.matrix.Columns, thundax.ai.vector, thundax.ai.Maths;
 
 { TMatrix }
 
-constructor TMatrix.Create(Columns, Rows : Integer);
+constructor TMatrix.Create(Columns, Rows: Integer);
 var
   i: Integer;
 begin
@@ -97,17 +103,37 @@ end;
 
 function TMatrix.Add(matrix: IMatrix): IMatrix;
 var
-  i, j : integer;
-  newMatrix : IMatrix;
+  i, j: Integer;
+  newMatrix: IMatrix;
 begin
   if (Self.FRows <> matrix.Rows) or (Self.FColumns <> matrix.Columns) then
     raise Exception.Create('Dimension matrix are different');
 
   newMatrix := TMatrix.Create(matrix.Columns, matrix.Rows);
-  for i := 0 to FColumns-1 do
-    for j := 0 to FRows-1 do
-      newMatrix.Cell[i, j] := Self.Cell[i,j] + matrix.Cell[i,j];
+  for i := 0 to FColumns - 1 do
+    for j := 0 to FRows - 1 do
+      newMatrix.Cell[i, j] := Self.Cell[i, j] + matrix.Cell[i, j];
 
+  result := newMatrix;
+end;
+
+function TMatrix.Covariance: IMatrix;
+var
+  i, j: Integer;
+  newMatrix, meanMatrix: IMatrix;
+  cov: Double;
+begin
+  newMatrix := TMatrix.Create(FColumns, FRows - 1);
+  meanMatrix := Self.Mean;
+
+  for i := 0 to newMatrix.Columns - 1 do
+  begin
+    for j := 0 to newMatrix.Rows - 1 do
+    begin
+      cov := meanMatrix.GetCovarianceValue(i, j);
+      newMatrix.Cell[i, j] := cov;
+    end;
+  end;
   result := newMatrix;
 end;
 
@@ -115,25 +141,39 @@ constructor TMatrix.Create(Columns: TArrayColumns);
 var
   i, j: Integer;
 begin
-  FRows := High(Columns[0].Values)+1;
-  FColumns := High(Columns)+1;
+  FRows := High(Columns[0].Values) + 1;
+  FColumns := High(Columns) + 1;
   SetLength(FMultiArray, FColumns);
   for i := 0 to FColumns - 1 do
     SetLength(FMultiArray[i], FRows);
 
-  for i := 0 to FColumns-1 do
-    for j := 0 to FRows-1 do
-      SetCell(i,j,Columns[i].Values[j]);
+  for i := 0 to FColumns - 1 do
+    for j := 0 to FRows - 1 do
+      SetCell(i, j, Columns[i].Values[j]);
 end;
 
 function TMatrix.GetCell(x, y: Integer): Double;
 begin
-  Result := FMultiArray[x, y];
+  result := FMultiArray[x, y];
 end;
 
 function TMatrix.GetColumns: Integer;
 begin
   result := FColumns;
+end;
+
+function TMatrix.GetCovarianceValue(Column, Row: Integer): Double;
+var
+  i: Integer;
+  sum, cov: Double;
+begin
+  sum := 0;
+  for i := 0 to FRows - 1 do
+  begin
+    sum := sum + (Self.Cell[Column, i] * Self.Cell[Row, i]);
+  end;
+  cov := sum / (FRows - 1);
+  result := cov;
 end;
 
 function TMatrix.GetRows: Integer;
@@ -152,24 +192,47 @@ begin
   end;
 end;
 
-function TMatrix.Multiply(matrix: IMatrix): Imatrix;
+function TMatrix.Mean(): IMatrix;
 var
-  i, j, k : integer;
-  newMatrix : IMatrix;
-  sum : double;
+  i, j: Integer;
+  sum, Mean: Double;
+  newMatrix: IMatrix;
+begin
+  newMatrix := TMatrix.Create(FColumns, FRows);
+  for i := 0 to FColumns - 1 do
+  begin
+    sum := 0;
+    for j := 0 to FRows - 1 do
+    begin
+      sum := sum + Self.Cell[i, j]
+    end;
+    Mean := sum / FRows;
+    for j := 0 to newMatrix.Rows - 1 do
+    begin
+      newMatrix.Cell[i, j] := Self.Cell[i, j] - Mean;
+    end;
+  end;
+  result := newMatrix;
+end;
+
+function TMatrix.Multiply(matrix: IMatrix): IMatrix;
+var
+  i, j, k: Integer;
+  newMatrix: IMatrix;
+  sum: Double;
 begin
   if (Self.FRows <> matrix.Rows) or (Self.FColumns <> matrix.Columns) then
     raise Exception.Create('Dimension matrix are different');
 
   newMatrix := TMatrix.Create(matrix.Columns, matrix.Rows);
-  for i := 0 to FColumns-1 do
+  for i := 0 to FColumns - 1 do
   begin
-    for j := 0 to matrix.Rows-1 do
+    for j := 0 to matrix.Rows - 1 do
     begin
       sum := 0;
-      for k := 0 to FRows-1 do
+      for k := 0 to FRows - 1 do
       begin
-        sum := sum + Self.Cell[k,j]*matrix.Cell[i,k];
+        sum := sum + Self.Cell[k, j] * matrix.Cell[i, k];
       end;
       newMatrix.Cell[i, j] := sum;
     end;
@@ -183,28 +246,28 @@ begin
   FMultiArray[x, y] := Value;
 end;
 
-procedure TMatrix.SetColumns(value: Integer);
+procedure TMatrix.SetColumns(Value: Integer);
 begin
-  FColumns := value;
+  FColumns := Value;
 end;
 
-procedure TMatrix.SetRows(value: Integer);
+procedure TMatrix.SetRows(Value: Integer);
 begin
-  FRows := value;
+  FRows := Value;
 end;
 
-function TMatrix.Substract(matrix: IMatrix): Imatrix;
+function TMatrix.Substract(matrix: IMatrix): IMatrix;
 var
-  i, j : integer;
-  newMatrix : IMatrix;
+  i, j: Integer;
+  newMatrix: IMatrix;
 begin
   if (Self.FRows <> matrix.Rows) or (Self.FColumns <> matrix.Columns) then
     raise Exception.Create('Dimension matrix are different');
 
   newMatrix := TMatrix.Create(matrix.Columns, matrix.Rows);
-  for i := 0 to FColumns-1 do
-    for j := 0 to FRows-1 do
-      newMatrix.Cell[i, j] := Self.Cell[i,j] - matrix.Cell[i,j];
+  for i := 0 to FColumns - 1 do
+    for j := 0 to FRows - 1 do
+      newMatrix.Cell[i, j] := Self.Cell[i, j] - matrix.Cell[i, j];
 
   result := newMatrix;
 end;
@@ -212,16 +275,45 @@ end;
 function TMatrix.ToString: string;
 var
   i, j: Integer;
-  sLine, sRowLine : string;
+  sLine, sRowLine: string;
+  maxLength: Integer;
+  vector: IVector<Integer>;
+  newString: string;
 begin
   sRowLine := '';
+  // First get the max colum length
+  maxLength := 0;
+  vector := TVector<Integer>.Create(Self.FColumns);
+  for j := 0 to Self.FColumns - 1 do
+  begin
+    maxLength := 0;
+    for i := 0 to Self.FRows - 1 do
+    begin
+      if TMathHelper.Compare(FMultiArray[j, i], 0, '>=') then
+        newString := '+' + FloatToStr(FMultiArray[j, i])
+      else
+        newString := FloatToStr(FMultiArray[j, i]);
+
+      if Length(newString) > maxLength then
+        maxLength := Length(newString);
+    end;
+    vector.Cell[j] := maxLength;
+  end;
+
   for i := 0 to Self.FRows - 1 do
   begin
     sLine := '';
     for j := 0 to Self.FColumns - 1 do
-      sLine := sLine + FloatToStr(FMultiArray[j, i]) + '    ';
+    begin
+      if TMathHelper.Compare(FMultiArray[j, i], 0, '>=') then
+        newString := '+' + FloatToStr(FMultiArray[j, i])
+      else
+        newString := FloatToStr(FMultiArray[j, i]);
+      sLine := sLine + newString + StringOfChar(' ', 1 + (vector.Cell[j] - Length(newString)));
+    end;
     sRowLine := sRowLine + sLine + sLineBreak;
   end;
+  sRowLine := StringReplace(sRowLine, '+', ' ', [rfReplaceAll, rfIgnoreCase]);
   result := sRowLine;
 end;
 

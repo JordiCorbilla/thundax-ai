@@ -29,7 +29,7 @@ unit thundax.ai.maths;
 
 interface
 
-uses types, thundax.ai.coordenate;
+uses Types, thundax.ai.coordenate;
 
 type
   TMathHelper = class(TObject)
