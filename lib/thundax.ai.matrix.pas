@@ -52,7 +52,9 @@ type
     function Multiply(matrix: IMatrix): IMatrix;
     function Mean(): IMatrix;
     function Covariance(): IMatrix;
+    function Distance() : IMatrix;
     function GetCovarianceValue(Column, Row: Integer): Double;
+    function GetDistance(Column, Row : Integer) : Double;
   end;
 
   TMatrix = class(TInterfacedObject, IMatrix)
@@ -79,7 +81,9 @@ type
     function Multiply(matrix: IMatrix): IMatrix;
     function Mean(): IMatrix;
     function GetCovarianceValue(Column, Row: Integer): Double;
+    function GetDistance(Column, Row : Integer) : Double;
     function Covariance(): IMatrix;
+    function Distance() : IMatrix;
     function ToString(): string; override;
   end;
 
@@ -123,7 +127,7 @@ var
   newMatrix, meanMatrix: IMatrix;
   cov: Double;
 begin
-  newMatrix := TMatrix.Create(FColumns, FRows - 1);
+  newMatrix := TMatrix.Create(FColumns, FColumns);
   meanMatrix := Self.Mean;
 
   for i := 0 to newMatrix.Columns - 1 do
@@ -152,6 +156,28 @@ begin
       SetCell(i, j, Columns[i].Values[j]);
 end;
 
+function TMatrix.Distance: IMatrix;
+var
+  i, j, k : Integer;
+  newMatrix : IMatrix;
+  dist : double;
+begin
+  newMatrix := TMatrix.Create(FRows-1, FRows-1);
+  k := 0;
+  for i := 0 to FColumns-1 do
+  begin
+    Inc(k);
+    j := k;
+    while j < FRows do
+    begin
+      dist := GetDistance(i, j);
+      newMatrix.Cell[i, j-1] := dist;
+      Inc(j);
+    end;
+  end;
+  result := newMatrix;
+end;
+
 function TMatrix.GetCell(x, y: Integer): Double;
 begin
   result := FMultiArray[x, y];
@@ -174,6 +200,20 @@ begin
   end;
   cov := sum / (FRows - 1);
   result := cov;
+end;
+
+function TMatrix.GetDistance(Column, Row: Integer): Double;
+var
+  i: Integer;
+  sum, dist: Double;
+begin
+  sum := 0;
+  for i := 0 to FColumns - 1 do
+  begin
+    sum := sum + Sqr((Self.Cell[i, Column] - Self.Cell[i, Row]));
+  end;
+  dist := Sqrt(sum);
+  result := dist;
 end;
 
 function TMatrix.GetRows: Integer;
