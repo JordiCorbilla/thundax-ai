@@ -71,6 +71,9 @@ contains
   thundax.ai.scanner in 'lib\thundax.ai.scanner.pas',
   thundax.ai.tokens in 'lib\thundax.ai.tokens.pas',
   thundax.ai.layout.text in 'lib\thundax.ai.layout.text.pas',
-  thundax.ai.stringHelper in 'lib\thundax.ai.stringHelper.pas';
+  thundax.ai.stringHelper in 'lib\thundax.ai.stringHelper.pas',
+  thundax.ai.attribute.ordinal in 'lib\thundax.ai.attribute.ordinal.pas',
+  thundax.ai.attribute.numerical in 'lib\thundax.ai.attribute.numerical.pas',
+  thundax.ai.attribute in 'lib\thundax.ai.attribute.pas';
 
 end.
