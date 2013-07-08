@@ -12,9 +12,11 @@ type
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    Button4: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
   private
     procedure Display(s: string);
     { Private declarations }
@@ -28,7 +30,7 @@ var
 implementation
 
 uses
-  thundax.ai.matrix, thundax.ai.matrix.columns, thundax.ai.matrix.bind;
+  thundax.ai.matrix, thundax.ai.matrix.columns, thundax.ai.matrix.bind, thundax.ai.table;
 
 {$R *.dfm}
 
@@ -115,6 +117,31 @@ begin
   matrix1 := TBind.New([TColumn.create([4, 4.2, 3.9, 4.3, 4.1]), TColumn.create([2, 2.1, 2, 2.1, 2.2]), TColumn.create([0.60, 0.59, 0.58, 0.62, 0.63])]).matrix;
   Display(matrix1.Covariance.ToString);
 
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+var
+  table: ITable;
+  i, j: Integer;
+begin
+  table := TTable.Create(5, 5);
+
+  for i := 0 to 4 do
+  begin
+    for j := 0 to 1 do
+    begin
+      table.Cell[i, j] := ' Col ' + IntToStr(i);
+    end;
+  end;
+
+  for i := 0 to 4 do
+  begin
+    for j := 1 to 4 do
+    begin
+      table.Cell[i, j] := IntToStr((Random(2)*-1) + Random(10000)) + '.' + IntToStr(Random(20));
+    end;
+  end;
+  Display(table.ToString);
 end;
 
 procedure TForm1.Display(s : string);

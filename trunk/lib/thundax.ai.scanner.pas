@@ -25,50 +25,35 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-unit thundax.ai.matrix.columns;
+unit thundax.ai.scanner;
 
 interface
 
 type
-  TArrayDouble = array of Double;
-
-  IColumn = interface
-    procedure SetValues(const Value: TArrayDouble);
-    function GetValues() : TArrayDouble;
-    property Values : TArrayDouble read GetValues write SetValues;
-  end;
-
-  TColumn = class(TInterfacedObject, IColumn)
-  private
-    FValues: TArrayDouble;
-    procedure SetValues(const Value: TArrayDouble);
-    function GetValues() : TArrayDouble;
-  public
-    constructor Create(values: array of Double);
-    property Values : TArrayDouble read GetValues write SetValues;
+  TScanner = class(TObject)
+    procedure ScanLine(line : string);
   end;
 
 implementation
 
-{ TColumn }
+uses
+  RegularExpressions;
 
-constructor TColumn.Create(values: array of Double);
+{ TScanner }
+
+procedure TScanner.ScanLine(line: string);
 var
   i : integer;
+  s : string;
 begin
-  SetLength(FValues, High(values)+1);
-  for I := 0 to High(values) do
-    FValues[i] := values[i];
-end;
+  for i := 1 to Length(line) do
+  begin
+    s := s + line[i];
+    if s <> '' then
+    begin
 
-function TColumn.GetValues: TArrayDouble;
-begin
-  Result := FValues;
-end;
-
-procedure TColumn.SetValues(const Value: TArrayDouble);
-begin
-  FValues := Value;
+    end;
+  end;
 end;
 
 end.

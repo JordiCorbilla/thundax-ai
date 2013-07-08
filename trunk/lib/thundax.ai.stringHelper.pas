@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2013, Jordi Corbilla
+// Copyright (c) 2013, Jordi Corbilla
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,50 +25,30 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-unit thundax.ai.matrix.columns;
+unit thundax.ai.stringHelper;
 
 interface
 
 type
-  TArrayDouble = array of Double;
-
-  IColumn = interface
-    procedure SetValues(const Value: TArrayDouble);
-    function GetValues() : TArrayDouble;
-    property Values : TArrayDouble read GetValues write SetValues;
-  end;
-
-  TColumn = class(TInterfacedObject, IColumn)
-  private
-    FValues: TArrayDouble;
-    procedure SetValues(const Value: TArrayDouble);
-    function GetValues() : TArrayDouble;
+  TStringHelper = class(TObject)
   public
-    constructor Create(values: array of Double);
-    property Values : TArrayDouble read GetValues write SetValues;
+    class function TryDecimalStrToInt(const S: string; out Value: Integer): Boolean; static;
+    class function TryFloatStrToFloat(const S: string; out Value: Double): Boolean; static;
   end;
 
 implementation
 
-{ TColumn }
+uses
+  SysUtils;
 
-constructor TColumn.Create(values: array of Double);
-var
-  i : integer;
+class function TStringHelper.TryDecimalStrToInt( const S: string; out Value: Integer): Boolean;
 begin
-  SetLength(FValues, High(values)+1);
-  for I := 0 to High(values) do
-    FValues[i] := values[i];
+   result := ( pos( '$', S ) = 0 ) and TryStrToInt( S, Value );
 end;
 
-function TColumn.GetValues: TArrayDouble;
+class function TStringHelper.TryFloatStrToFloat( const S: string; out Value: Double): Boolean;
 begin
-  Result := FValues;
-end;
-
-procedure TColumn.SetValues(const Value: TArrayDouble);
-begin
-  FValues := Value;
+   result := ( pos( '$', S ) = 0 ) and TryStrToFloat( S, Value );
 end;
 
 end.
