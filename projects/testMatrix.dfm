@@ -25,6 +25,7 @@ object Form1: TForm1
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
+    ScrollBars = ssBoth
     TabOrder = 0
     WordWrap = False
   end
@@ -54,5 +55,14 @@ object Form1: TForm1
     Caption = 'Test Examples'
     TabOrder = 3
     OnClick = Button3Click
+  end
+  object Button4: TButton
+    Left = 502
+    Top = 8
+    Width = 84
+    Height = 25
+    Caption = 'Test Table'
+    TabOrder = 4
+    OnClick = Button4Click
   end
 end

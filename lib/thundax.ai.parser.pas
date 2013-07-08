@@ -25,50 +25,25 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-unit thundax.ai.matrix.columns;
+unit thundax.ai.parser;
 
 interface
 
-type
-  TArrayDouble = array of Double;
+{
+The parser should allow:
 
-  IColumn = interface
-    procedure SetValues(const Value: TArrayDouble);
-    function GetValues() : TArrayDouble;
-    property Values : TArrayDouble read GetValues write SetValues;
-  end;
+ var c1 := c(1,0,1);
+ var c2 := c(1,0,1);
+ var c3 := c(1,0,1);
 
-  TColumn = class(TInterfacedObject, IColumn)
-  private
-    FValues: TArrayDouble;
-    procedure SetValues(const Value: TArrayDouble);
-    function GetValues() : TArrayDouble;
-  public
-    constructor Create(values: array of Double);
-    property Values : TArrayDouble read GetValues write SetValues;
-  end;
+ var matrix := b(c1,c2,c3);
+ matrix.print;
+
+}
+
+
+
 
 implementation
-
-{ TColumn }
-
-constructor TColumn.Create(values: array of Double);
-var
-  i : integer;
-begin
-  SetLength(FValues, High(values)+1);
-  for I := 0 to High(values) do
-    FValues[i] := values[i];
-end;
-
-function TColumn.GetValues: TArrayDouble;
-begin
-  Result := FValues;
-end;
-
-procedure TColumn.SetValues(const Value: TArrayDouble);
-begin
-  FValues := Value;
-end;
 
 end.

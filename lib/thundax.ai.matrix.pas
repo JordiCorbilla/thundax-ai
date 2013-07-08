@@ -33,7 +33,7 @@ uses
   thundax.ai.matrix.arraytypes;
 
 type
-  TMultiArray = Array of array of Double;
+  TMultiArray<T> = Array of array of T;
 
   IMatrix = interface
     function GetCell(x, y: Integer): Double;
@@ -61,7 +61,7 @@ type
   private
     FColumns: Integer;
     FRows: Integer;
-    FMultiArray: TMultiArray;
+    FMultiArray: TMultiArray<Double>;
     function GetCell(x, y: Integer): Double;
     procedure SetCell(x, y: Integer; const Value: Double);
     function GetColumns(): Integer;
@@ -90,7 +90,7 @@ type
 implementation
 
 uses
-  SysUtils, thundax.ai.matrix.Columns, thundax.ai.vector, thundax.ai.Maths;
+  SysUtils, thundax.ai.matrix.Columns, thundax.ai.vector, thundax.ai.Maths, thundax.ai.layout.text;
 
 { TMatrix }
 
@@ -313,47 +313,8 @@ begin
 end;
 
 function TMatrix.ToString: string;
-var
-  i, j: Integer;
-  sLine, sRowLine: string;
-  maxLength: Integer;
-  vector: IVector<Integer>;
-  newString: string;
 begin
-  sRowLine := '';
-  // First get the max colum length
-  vector := TVector<Integer>.Create(Self.FColumns);
-  for j := 0 to Self.FColumns - 1 do
-  begin
-    maxLength := 0;
-    for i := 0 to Self.FRows - 1 do
-    begin
-      if TMathHelper.Compare(FMultiArray[j, i], 0, '>=') then
-        newString := '+' + FloatToStr(FMultiArray[j, i])
-      else
-        newString := FloatToStr(FMultiArray[j, i]);
-
-      if Length(newString) > maxLength then
-        maxLength := Length(newString);
-    end;
-    vector.Cell[j] := maxLength;
-  end;
-
-  for i := 0 to Self.FRows - 1 do
-  begin
-    sLine := '';
-    for j := 0 to Self.FColumns - 1 do
-    begin
-      if TMathHelper.Compare(FMultiArray[j, i], 0, '>=') then
-        newString := '+' + FloatToStr(FMultiArray[j, i])
-      else
-        newString := FloatToStr(FMultiArray[j, i]);
-      sLine := sLine + newString + StringOfChar(' ', 1 + (vector.Cell[j] - Length(newString)));
-    end;
-    sRowLine := sRowLine + sLine + sLineBreak;
-  end;
-  sRowLine := StringReplace(sRowLine, '+', ' ', [rfReplaceAll, rfIgnoreCase]);
-  result := sRowLine;
+  Result := TTextLayoutDouble.New.FormatText(Self.FRows, Self.FColumns, FMultiArray);
 end;
 
 function TMatrix.Transpose: IMatrix;
