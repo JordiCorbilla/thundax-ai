@@ -87,9 +87,12 @@ begin
 end;
 
 function TAverageAttribute.ToString: string;
+var
+  description : string;
 begin
-  result := 'Value: ' + FloatToStr(FValue) + sLineBreak;
-  result := result + FAttributeList.ToString + sLineBreak;
+  description := '  Value: ' + FloatToStr(FValue) + sLineBreak;
+  description := description + FAttributeList.ToString + sLineBreak;
+  result := description;
 end;
 
 end.

@@ -157,15 +157,15 @@ var
   outClassInstance: TListClassInstances;
   Text: string;
 begin
-  Text := '{' + sLineBreak;
+  Text := '  {' + sLineBreak;
   for key in Self.Keys do
   begin
     Self.TryGetValue(key, outClassInstance);
-    Text := Text + '  ''' + key + '''' + sLineBreak;
+    Text := Text + '    ''' + key + '''' + sLineBreak;
     Text := Text + '' + outClassInstance.ToString + sLineBreak;
   end;
-  Text := Text + '  Goodness of Fit : ' + IntToStr(Self.CountInstances) + ' / ' + IntToStr(Self.FnumTotalInstances) + ' = ' + FloatToStr(GoodnessOfFit) + sLineBreak;
-  result := Text + '}';
+  Text := Text + '    Goodness of Fit : ' + IntToStr(Self.CountInstances) + ' / ' + IntToStr(Self.FnumTotalInstances) + ' = ' + FloatToStr(GoodnessOfFit) + sLineBreak;
+  result := Text + '  }';
 end;
 
 end.

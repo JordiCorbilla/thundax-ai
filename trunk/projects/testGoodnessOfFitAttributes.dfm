@@ -89,8 +89,9 @@ object Form2: TForm2
     Width = 1167
     Height = 277
     Align = alBottom
+    Color = clBlack
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clLime
     Font.Height = -11
     Font.Name = 'Courier New'
     Font.Style = []
