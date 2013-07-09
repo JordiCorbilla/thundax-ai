@@ -121,9 +121,9 @@ begin
   for i := 0 to Self.Count - 1 do
   begin
     if i <> Self.Count - 1 then
-      Text := Text + '    {''' + Self[i].yClass + ''' ' + IntToStr(Self[i].numInstances) + '}' + sLineBreak
+      Text := Text + '      {''' + Self[i].yClass + ''' ' + IntToStr(Self[i].numInstances) + '}' + sLineBreak
     else
-      Text := Text + '    {''' + Self[i].yClass + ''' ' + IntToStr(Self[i].numInstances) + '}'
+      Text := Text + '      {''' + Self[i].yClass + ''' ' + IntToStr(Self[i].numInstances) + '}'
   end;
   result := Text;
 end;

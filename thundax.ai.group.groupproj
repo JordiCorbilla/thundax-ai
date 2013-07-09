@@ -19,7 +19,7 @@
 				<Dependencies/>
 			</Projects>
 			<Projects Include="projects\thundax.ai.testGoodnessOfFitAttributes.dproj">
-				<Dependencies/>
+				<Dependencies>thundax.ai.dproj</Dependencies>
 			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
@@ -74,13 +74,13 @@
 		<Target Name="thundax_ai_gui:Make">
 			<MSBuild Projects="projects\thundax.ai.gui.dproj" Targets="Make"/>
 		</Target>
-		<Target Name="thundax_ai_testGoodnessOfFitAttributes">
+		<Target Name="thundax_ai_testGoodnessOfFitAttributes" DependsOnTargets="thundax.ai">
 			<MSBuild Projects="projects\thundax.ai.testGoodnessOfFitAttributes.dproj"/>
 		</Target>
-		<Target Name="thundax_ai_testGoodnessOfFitAttributes:Clean">
+		<Target Name="thundax_ai_testGoodnessOfFitAttributes:Clean" DependsOnTargets="thundax.ai:Clean">
 			<MSBuild Projects="projects\thundax.ai.testGoodnessOfFitAttributes.dproj" Targets="Clean"/>
 		</Target>
-		<Target Name="thundax_ai_testGoodnessOfFitAttributes:Make">
+		<Target Name="thundax_ai_testGoodnessOfFitAttributes:Make" DependsOnTargets="thundax.ai:Make">
 			<MSBuild Projects="projects\thundax.ai.testGoodnessOfFitAttributes.dproj" Targets="Make"/>
 		</Target>
 		<Target Name="Build">
