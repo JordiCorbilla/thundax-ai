@@ -16,7 +16,7 @@
 				<Dependencies>thundax.ai.dproj</Dependencies>
 			</Projects>
 			<Projects Include="projects\thundax.ai.gui.dproj">
-				<Dependencies/>
+				<Dependencies>thundax.ai.dproj</Dependencies>
 			</Projects>
 			<Projects Include="projects\thundax.ai.testGoodnessOfFitAttributes.dproj">
 				<Dependencies>thundax.ai.dproj</Dependencies>
@@ -65,13 +65,13 @@
 		<Target Name="thundax_ai_testMatrix:Make" DependsOnTargets="thundax.ai:Make">
 			<MSBuild Projects="projects\thundax.ai.testMatrix.dproj" Targets="Make"/>
 		</Target>
-		<Target Name="thundax_ai_gui">
+		<Target Name="thundax_ai_gui" DependsOnTargets="thundax.ai">
 			<MSBuild Projects="projects\thundax.ai.gui.dproj"/>
 		</Target>
-		<Target Name="thundax_ai_gui:Clean">
+		<Target Name="thundax_ai_gui:Clean" DependsOnTargets="thundax.ai:Clean">
 			<MSBuild Projects="projects\thundax.ai.gui.dproj" Targets="Clean"/>
 		</Target>
-		<Target Name="thundax_ai_gui:Make">
+		<Target Name="thundax_ai_gui:Make" DependsOnTargets="thundax.ai:Make">
 			<MSBuild Projects="projects\thundax.ai.gui.dproj" Targets="Make"/>
 		</Target>
 		<Target Name="thundax_ai_testGoodnessOfFitAttributes" DependsOnTargets="thundax.ai">
