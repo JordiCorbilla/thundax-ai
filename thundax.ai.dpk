@@ -74,6 +74,13 @@ contains
   thundax.ai.stringHelper in 'lib\thundax.ai.stringHelper.pas',
   thundax.ai.attribute.ordinal in 'lib\thundax.ai.attribute.ordinal.pas',
   thundax.ai.attribute.numerical in 'lib\thundax.ai.attribute.numerical.pas',
-  thundax.ai.attribute in 'lib\thundax.ai.attribute.pas';
+  thundax.ai.attribute in 'lib\thundax.ai.attribute.pas',
+  thundax.ai.attribute.list in 'lib\thundax.ai.attribute.list.pas',
+  thundax.ai.classInstance in 'lib\thundax.ai.classInstance.pas',
+  thundax.ai.classInstance.list in 'lib\thundax.ai.classInstance.list.pas',
+  thundax.ai.attribute.dictionary in 'lib\thundax.ai.attribute.dictionary.pas',
+  thundax.ai.attribute.average in 'lib\thundax.ai.attribute.average.pas',
+  thundax.ai.attribute.average.list in 'lib\thundax.ai.attribute.average.list.pas',
+  thundax.ai.attribute.average.list.sorted in 'lib\thundax.ai.attribute.average.list.sorted.pas';
 
 end.
