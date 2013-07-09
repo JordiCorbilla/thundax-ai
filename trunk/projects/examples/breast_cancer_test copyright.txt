@@ -1,0 +1,64 @@
+http://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)
+Breast Cancer Wisconsin (Diagnostic) Data Set 
+Download: Data Folder, Data Set Description
+
+Abstract: Diagnostic Wisconsin Breast Cancer Database
+
+
+Data Set Characteristics:  
+
+Multivariate
+
+Number of Instances:
+
+569
+
+Area:
+
+Life
+
+Attribute Characteristics:
+
+Real
+
+Number of Attributes:
+
+32
+
+Date Donated
+
+1995-11-01
+
+Associated Tasks:
+
+Classification
+
+Missing Values?
+
+No
+
+Number of Web Hits:
+
+229841
+
+
+Source:
+
+Creators: 
+
+1. Dr. William H. Wolberg, General Surgery Dept. 
+University of Wisconsin, Clinical Sciences Center 
+Madison, WI 53792 
+wolberg '@' eagle.surgery.wisc.edu 
+
+2. W. Nick Street, Computer Sciences Dept. 
+University of Wisconsin, 1210 West Dayton St., Madison, WI 53706 
+street '@' cs.wisc.edu 608-262-6619 
+
+3. Olvi L. Mangasarian, Computer Sciences Dept. 
+University of Wisconsin, 1210 West Dayton St., Madison, WI 53706 
+olvi '@' cs.wisc.edu 
+
+Donor: 
+
+Nick Street
