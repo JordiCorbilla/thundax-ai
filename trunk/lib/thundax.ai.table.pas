@@ -43,6 +43,7 @@ type
     function GetCell(col, row: Integer): String;
     procedure SetCell(col, row: Integer; const Value: String);
     property Cell[col, row: Integer]: string read GetCell write SetCell;
+    function filter(ColumnName: string; Value: string; operation: string): ITable;
     function ToString(): string;
   end;
 
