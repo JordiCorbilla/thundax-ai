@@ -77,12 +77,13 @@ constructor TDistinctSortedAttributeList.Create(name: string);
 begin
   SetName(name);
   FDefaultList := TObjectList<TNumericalAttribute>.Create;
+  inherited Create(True);
 end;
 
 destructor TDistinctSortedAttributeList.Destroy;
 begin
-  FDefaultList.Free;
-  inherited;
+  FreeAndNil(FDefaultList);
+  //inherited;
 end;
 
 function TDistinctSortedAttributeList.Exists(attribute: TNumericalAttribute): Boolean;

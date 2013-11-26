@@ -72,7 +72,7 @@ end;
 
 destructor TAverageAttribute.Destroy;
 begin
-  FAttributeList.Free;
+  FreeAndNil(FAttributeList);
   inherited;
 end;
 

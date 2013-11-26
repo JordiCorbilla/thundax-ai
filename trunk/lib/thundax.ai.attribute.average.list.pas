@@ -47,6 +47,7 @@ type
     function ToString(): string; override;
     function SimpleOutput: string;
     constructor Create(name: string);
+    destructor Destroy(); override;
     property Name: string read FName write SetName;
   end;
 
@@ -67,6 +68,13 @@ end;
 constructor TAverageAttributeList.Create(name: string);
 begin
   SetName(name);
+  inherited Create(True);
+end;
+
+destructor TAverageAttributeList.Destroy;
+begin
+
+  inherited;
 end;
 
 function TAverageAttributeList.Exists(attribute: TAverageAttribute): Boolean;
@@ -139,3 +147,5 @@ begin
 end;
 
 end.
+
+

@@ -50,10 +50,8 @@ type
     procedure ComboBox1Change(Sender: TObject);
     procedure ComboBox1Enter(Sender: TObject);
     procedure ComboBox1Exit(Sender: TObject);
-    procedure sgAttributesDrawCell(Sender: TObject; ACol, ARow: Integer;
-      Rect: TRect; State: TGridDrawState);
-    procedure sgAttributesSelectCell(Sender: TObject; ACol, ARow: Integer;
-      var CanSelect: Boolean);
+    procedure sgAttributesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+    procedure sgAttributesSelectCell(Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
     procedure btnCalcGoodnessClick(Sender: TObject);
   private
     { Private declarations }
@@ -106,7 +104,7 @@ begin
   if ClassIndex = 0 then
     raise Exception.Create('You need to select a column as a Class');
 
-  // Tractar cada columna amb les dades obtingudes
+  // Treat each column with the given data
   for i := 1 to sgAttributes.ColCount - 1 do
   begin
     treatment := sgAttributes.Cells[i, 1];
@@ -132,10 +130,10 @@ begin
             log.Lines.Add(IndividualItems.SimpleOutput);
           log.Lines.Add('');
         finally
-          IndividualItems.Free;
+          FreeAndNil(IndividualItems);
         end;
       finally
-        attrList.Free;
+        FreeAndNil(attrList);
       end;
     end;
     if treatment = 'Numerical' then
@@ -161,10 +159,10 @@ begin
             log.Lines.Add(averageList.SimpleOutput);
           log.Lines.Add('');
         finally
-          averageList.Free;
+          FreeAndNil(averageList);
         end;
       finally
-        numericalList.Free;
+        FreeAndNil(numericalList);
       end;
     end;
   end;
@@ -232,7 +230,7 @@ begin
         for j := 0 to list.Count - 1 do
           sgAttributes.Cells[j + 1, i - 0] := list[j];
       finally
-        list.Free;
+        FreeAndNil(list);
       end;
     end;
     CloseFile(f);

@@ -105,7 +105,7 @@ begin
   for key in Self.Keys do
   begin
     Self.TryGetValue(key, outClassInstances);
-    outClassInstances.Free;
+    FreeAndNil(outClassInstances);
   end;
   inherited;
 end;

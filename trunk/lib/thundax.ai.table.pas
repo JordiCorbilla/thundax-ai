@@ -158,7 +158,7 @@ begin
       end;
     end;
   finally
-    listIds.Free;
+    FreeAndNil(listIds);
   end;
   Result := table;
 end;
