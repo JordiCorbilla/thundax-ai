@@ -2,7 +2,7 @@ program thundax.ai.testMatrix;
 
 uses
   Forms,
-  testMatrix in 'testMatrix.pas' {Form1};
+  testMatrix in 'testMatrix.pas' {frmTestMatrix};
 
 {$R *.res}
 
@@ -10,6 +10,6 @@ begin
   Application.Initialize;
   ReportMemoryLeaksOnShutdown := true;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TfrmTestMatrix, frmTestMatrix);
   Application.Run;
 end.

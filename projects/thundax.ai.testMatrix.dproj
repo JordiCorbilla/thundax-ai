@@ -53,7 +53,7 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="testMatrix.pas">
-				<Form>Form1</Form>
+				<Form>frmTestMatrix</Form>
 			</DCCReference>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>

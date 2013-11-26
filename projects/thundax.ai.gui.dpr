@@ -42,6 +42,8 @@ begin
   try
     SetTextColour(clGreen);
     Writeln('This is thundax.ai.gui');
+    Writeln('This is a demo, type ''example'' and hit enter!');
+    Writeln('');
     SetTextColour(clWhite);
     Readln(s);
     while s <> 'exit' do

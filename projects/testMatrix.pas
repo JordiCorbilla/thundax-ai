@@ -34,7 +34,7 @@ uses
   Dialogs, StdCtrls;
 
 type
-  TForm1 = class(TForm)
+  TfrmTestMatrix = class(TForm)
     Memo1: TMemo;
     Button1: TButton;
     Button2: TButton;
@@ -52,7 +52,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  frmTestMatrix: TfrmTestMatrix;
 
 implementation
 
@@ -61,7 +61,7 @@ uses
 
 {$R *.dfm}
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TfrmTestMatrix.Button1Click(Sender: TObject);
 var
   matrix: IMatrix;
   c1, c2, c3: IColumn;
@@ -95,7 +95,7 @@ begin
 
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TfrmTestMatrix.Button2Click(Sender: TObject);
 var
   matrix: IMatrix;
   c1, c2, c3, c4, c5: IColumn;
@@ -125,7 +125,7 @@ begin
   Display(matrix.Distance.ToString);
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TfrmTestMatrix.Button3Click(Sender: TObject);
 var
   matrix1, matrix2: IMatrix;
 begin
@@ -146,7 +146,7 @@ begin
 
 end;
 
-procedure TForm1.Button4Click(Sender: TObject);
+procedure TfrmTestMatrix.Button4Click(Sender: TObject);
 var
   table: ITable;
   i, j: Integer;
@@ -177,7 +177,7 @@ begin
   Display(table.ToString);
 end;
 
-procedure TForm1.Display(s : string);
+procedure TfrmTestMatrix.Display(s : string);
 begin
   Memo1.Lines.Add(s);
 end;
