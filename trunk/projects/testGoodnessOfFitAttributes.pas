@@ -34,7 +34,7 @@ uses
   Dialogs, StdCtrls, ExtCtrls, Grids;
 
 type
-  TForm2 = class(TForm)
+  TfrmGoodness = class(TForm)
     Panel1: TPanel;
     edtPath: TEdit;
     btnOpenFile: TButton;
@@ -60,7 +60,7 @@ type
   end;
 
 var
-  Form2: TForm2;
+  frmGoodness: TfrmGoodness;
 
 implementation
 
@@ -75,7 +75,7 @@ uses
 //It will load the data from the grid and pupulate the necessary classes.
 //Once done, it will report the values into the log section.
 //First it will work on the ordinal values and the on the numerical ones.
-procedure TForm2.btnCalcGoodnessClick(Sender: TObject);
+procedure TfrmGoodness.btnCalcGoodnessClick(Sender: TObject);
 var
   i, j: integer;
   attrList: TAttributeList;
@@ -172,7 +172,7 @@ end;
 //Each row must be separated in a new line.
 //The character delimiter must be a ','.
 //The file must contain the description of the columns.
-procedure TForm2.btnOpenFileClick(Sender: TObject);
+procedure TfrmGoodness.btnOpenFileClick(Sender: TObject);
   procedure ExtractValues(const aStrings: TStrings; const aValue: string; const aDelimiter: string);
   var
     position: integer;
@@ -244,14 +244,14 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox1Change(Sender: TObject);
+procedure TfrmGoodness.ComboBox1Change(Sender: TObject);
 begin
   sgAttributes.Cells[sgAttributes.Col, sgAttributes.Row] := ComboBox1.Items[ComboBox1.ItemIndex];
   ComboBox1.Visible := False;
   sgAttributes.SetFocus;
 end;
 
-procedure TForm2.ComboBox1Enter(Sender: TObject);
+procedure TfrmGoodness.ComboBox1Enter(Sender: TObject);
 var
   i: integer;
 begin
@@ -262,7 +262,7 @@ begin
   end;
 end;
 
-procedure TForm2.ComboBox1Exit(Sender: TObject);
+procedure TfrmGoodness.ComboBox1Exit(Sender: TObject);
 begin
   if ComboBox1.ItemIndex <> -1 then
     sgAttributes.Cells[sgAttributes.Col, sgAttributes.Row] := ComboBox1.Items[ComboBox1.ItemIndex]
@@ -277,7 +277,7 @@ begin
   sgAttributes.SetFocus;
 end;
 
-procedure TForm2.FormCreate(Sender: TObject);
+procedure TfrmGoodness.FormCreate(Sender: TObject);
 begin
   sgAttributes.DefaultRowHeight := ComboBox1.Height;
   ComboBox1.Visible := False;
@@ -289,7 +289,7 @@ begin
   ComboBox1.ItemIndex := 0;
 end;
 
-procedure TForm2.sgAttributesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
+procedure TfrmGoodness.sgAttributesDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
   if (ARow in [1, 2]) and (ACol > 0) then
   begin
@@ -302,7 +302,7 @@ begin
   end;
 end;
 
-procedure TForm2.sgAttributesSelectCell(Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+procedure TfrmGoodness.sgAttributesSelectCell(Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
 var
   r: TRect;
   Value: string;
