@@ -46,6 +46,7 @@ type
     function ToString(): string; override;
     function GetListOfIndividualItems(): TDictionaryAttributes;
     constructor Create(name: string);
+    destructor Destroy(); override;
     property TotalNumberOfItems: integer read FTotalNumberOfItems write SetTotalNumberOfItems;
     property Name: string read FName write SetName;
   end;
@@ -67,6 +68,13 @@ end;
 constructor TAttributeList.Create(name: string);
 begin
   SetName(name);
+  inherited Create(True);
+end;
+
+destructor TAttributeList.Destroy;
+begin
+
+  inherited;
 end;
 
 function TAttributeList.Exists(attribute: TOrdinalAttribute): Boolean;

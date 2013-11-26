@@ -32,7 +32,6 @@ object Form2: TForm2
     Height = 41
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 998
     object edtPath: TEdit
       Left = 8
       Top = 8
@@ -80,8 +79,6 @@ object Form2: TForm2
     TabOrder = 1
     OnDrawCell = sgAttributesDrawCell
     OnSelectCell = sgAttributesSelectCell
-    ExplicitWidth = 1102
-    ExplicitHeight = 240
   end
   object log: TMemo
     Left = 0
@@ -100,7 +97,6 @@ object Form2: TForm2
     ScrollBars = ssBoth
     TabOrder = 2
     WordWrap = False
-    ExplicitWidth = 1102
   end
   object ComboBox1: TComboBox
     Left = 957

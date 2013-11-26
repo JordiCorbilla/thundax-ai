@@ -44,6 +44,7 @@ type
     property yClass: string read FyClass write SetyClass;
     property numInstances: integer read FnumInstances write SetnumInstances;
     constructor Create(yClass: string; numInstances: integer);
+    destructor Destroy(); override;
   end;
 
 implementation
@@ -54,6 +55,12 @@ constructor TClassInstances.Create(yClass: string; numInstances: integer);
 begin
   SetyClass(yClass);
   SetnumInstances(numInstances);
+end;
+
+destructor TClassInstances.Destroy;
+begin
+
+  inherited;
 end;
 
 procedure TClassInstances.SetnumInstances(const Value: integer);

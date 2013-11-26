@@ -46,6 +46,8 @@ type
     function ToString(): string; override;
     function getMaxValue(): integer;
     function getBetterClass(): string;
+    constructor Create();
+    destructor Destroy(); override;
   end;
 
 implementation
@@ -61,9 +63,22 @@ var
 begin
   result := 0;
   if Exists(Value, currentInstance) then
-    currentInstance.numInstances := currentInstance.numInstances + 1
+  begin
+    currentInstance.numInstances := currentInstance.numInstances + 1;
+    Value.Free;
+  end
   else
     result := inherited Add(Value);
+end;
+
+constructor TListClassInstances.Create;
+begin
+  inherited Create(True);
+end;
+
+destructor TListClassInstances.Destroy;
+begin
+  inherited;
 end;
 
 function TListClassInstances.Exists(classInstances: TClassInstances; var currentInstance: TClassInstances): Boolean;
