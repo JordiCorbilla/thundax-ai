@@ -171,3 +171,11 @@ begin
 
 **[Convex Hull](http://en.wikipedia.org/wiki/Convex_hull):**
   ![](https://thundax-ai.googlecode.com/files/ConvexHull.png)
+
+**Some examples can be found here:**
+
+ - [thundax.ai.testGoodnessOfFitAttributes.exe](https://app.box.com/s/yk452fla6jocrlnisw728r9nn2dufm3w)
+ - [thundax.ai.testMatrix.exe](https://app.box.com/s/grhhdrgp3g9vywvx2pemjur4chxc85j1)
+ - [thundax.ai.gui.exe](https://app.box.com/s/unq4xlol712wt74v0xczgmfparvihx8f)
+ - [thundax.ai.testConvexHull.exe](https://app.box.com/s/02kr44l59zb9avl1l18fd1lakebqb8wd)
+ - [thundax.ai.testSpanningTree.exe](https://app.box.com/s/x7565m5iep8uergbrk4909ntftpp643e)
