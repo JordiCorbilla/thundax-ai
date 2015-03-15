@@ -179,3 +179,8 @@ begin
  - [thundax.ai.gui.exe](https://app.box.com/s/unq4xlol712wt74v0xczgmfparvihx8f)
  - [thundax.ai.testConvexHull.exe](https://app.box.com/s/02kr44l59zb9avl1l18fd1lakebqb8wd)
  - [thundax.ai.testSpanningTree.exe](https://app.box.com/s/x7565m5iep8uergbrk4909ntftpp643e)
+
+## Sponsors
+No sponsors yet! Will you be the first?
+
+[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L5FCF6LX5C9AW "Donate once-off to this project using Paypal")
