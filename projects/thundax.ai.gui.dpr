@@ -3,7 +3,7 @@ program thundax.ai.gui;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, StrUtils, Windows, graphics,
+  SysUtils, StrUtils, Windows, vcl.graphics,
   thundax.ai.matrix, thundax.ai.matrix.columns, thundax.ai.matrix.bind;
 
 var

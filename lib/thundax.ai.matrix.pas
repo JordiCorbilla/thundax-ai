@@ -61,7 +61,7 @@ type
   private
     FColumns: Integer;
     FRows: Integer;
-    FMultiArray: TMultiArray<Double>;
+    FMultiArray: Array of array of Double;
     function GetCell(x, y: Integer): Double;
     procedure SetCell(x, y: Integer; const Value: Double);
     function GetColumns(): Integer;

@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Jordi Corbilla
+// Copyright (c) 2015, Jordi Corbilla
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,8 @@ uses
   thundax.ai.matrix;
 
 type
-  TMultiArrayDouble = TMultiArray<Double>;
-  TMultiArrayString = TMultiArray<String>;
+  TMultiArrayDouble = Array of array of Double;
+  TMultiArrayString = Array of array of String;
 
   ITextLayout = interface
     function FormatText(Rows : integer; columns: integer; MultiArrayIn : variant) : string;
