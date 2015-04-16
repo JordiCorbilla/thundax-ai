@@ -1,4 +1,4 @@
-// Copyright (c) 2013, Jordi Corbilla
+// Copyright (c) 2015, Jordi Corbilla
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -40,10 +40,12 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
+    Button5: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
   private
     procedure Display(s: string);
     { Private declarations }
@@ -175,6 +177,18 @@ begin
   Display('filtering -> Col 1 < 5000');
   table := table.filter(' Col 1', '5000', '<');
   Display(table.ToString);
+end;
+
+procedure TfrmTestMatrix.Button5Click(Sender: TObject);
+var
+  matrix, std: IMatrix;
+begin
+  matrix := TMatrix.Create('Wholesale customers.data', ',');
+  Display('Matrix:');
+  Display(matrix.ToString);
+  std := matrix.standardisation;
+  Display('Standardisation Matrix:');
+  Display(std.ToString);
 end;
 
 procedure TfrmTestMatrix.Display(s : string);

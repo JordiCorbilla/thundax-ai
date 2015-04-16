@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2013, Jordi Corbilla
+// Copyright (c) 2012-2015, Jordi Corbilla
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@ unit thundax.ai.matrix;
 interface
 
 uses
-  thundax.ai.matrix.arraytypes;
+  thundax.ai.matrix.arraytypes, Generics.collections, Contnrs;
 
 type
   TMultiArray<T> = Array of array of T;
@@ -52,6 +52,7 @@ type
     function Multiply(matrix: IMatrix): IMatrix;
     function Mean(): IMatrix;
     function Covariance(): IMatrix;
+    function Standardisation() : IMatrix;
     function Distance() : IMatrix;
     function GetCovarianceValue(Column, Row: Integer): Double;
     function GetDistance(Column, Row : Integer) : Double;
@@ -71,6 +72,7 @@ type
   public
     constructor Create(Columns, Rows: Integer); overload;
     constructor Create(Columns: TArrayColumns); overload;
+    constructor Create(filename : string; delimiter : char); overload;
     procedure Initialise();
     property Columns: Integer read GetColumns write SetColumns;
     property Rows: Integer read GetRows write SetRows;
@@ -83,6 +85,7 @@ type
     function GetCovarianceValue(Column, Row: Integer): Double;
     function GetDistance(Column, Row : Integer) : Double;
     function Covariance(): IMatrix;
+    function Standardisation() : IMatrix;
     function Distance() : IMatrix;
     function ToString(): string; override;
   end;
@@ -90,7 +93,8 @@ type
 implementation
 
 uses
-  SysUtils, thundax.ai.matrix.Columns, thundax.ai.vector, thundax.ai.Maths, thundax.ai.layout.text;
+  SysUtils, thundax.ai.matrix.Columns, thundax.ai.vector, thundax.ai.Maths, thundax.ai.layout.text,
+  System.Classes;
 
 { TMatrix }
 
@@ -139,6 +143,36 @@ begin
     end;
   end;
   result := newMatrix;
+end;
+
+constructor TMatrix.Create(filename: string; delimiter : char);
+var
+   myFile : TextFile;
+   LineText   : string;
+   OutPutList: TStringList;
+   i, j: Integer;
+begin
+  AssignFile(myFile, filename);
+  Reset(myFile);
+  while not Eof(myFile) do
+  begin
+    ReadLn(myFile, LineText);
+    OutPutList := TStringList.Create;
+    OutPutList.Clear;
+    OutPutList.Delimiter := delimiter;
+    OutputList.StrictDelimiter := true;
+    OutputList.DelimitedText := LineText;
+    SetLength(FMultiArray, OutPutList.count);
+    FColumns := OutPutList.count;
+    for i := 0 to OutPutList.Count -1 do
+    begin
+      SetLength(FMultiArray[i], Length(FMultiArray[i])+1);
+    end;
+    for j := 0 to OutPutList.Count - 1 do
+      SetCell(j,Length(FMultiArray[j])-1, OutPutList[j].ToDouble());
+    OutPutList.Free;
+  end;
+  FRows := Length(FMultiArray[0]);
 end;
 
 constructor TMatrix.Create(Columns: TArrayColumns);
@@ -294,6 +328,54 @@ end;
 procedure TMatrix.SetRows(Value: Integer);
 begin
   FRows := Value;
+end;
+
+function TMatrix.Standardisation: IMatrix;
+var
+  average : array of double;
+  std : array of double;
+  standard : IMatrix;
+  i, j : integer;
+begin
+  //Normalization: substract mean and divide by std deviation
+  standard := TMatrix.Create(Self.FColumns, Self.FRows);
+  SetLength(average, FColumns);
+  SetLength(std, FColumns);
+  for i := 0 to FColumns - 1 do
+  begin
+    average[i] := 0.0;
+    std[i] := 0.0;
+  end;
+
+  //Calculate the average
+  for i := 0 to FColumns - 1 do
+  begin
+    for j := 0 to FRows - 1 do
+    begin
+      average[i] := average[i] + Self.Cell[i, j];
+    end;
+    average[i] := average[i] / (FRows);
+  end;
+
+  //Calculate the Standard deviation
+  for i := 0 to FColumns - 1 do
+  begin
+    for j := 0 to FRows - 1 do
+    begin
+      std[i] := std[i] + sqr(average[i] - Self.Cell[i, j]);
+    end;
+    std[i] := sqrt(std[i] / (FRows));
+  end;
+
+  //Recalculate the content of the properties
+  for i := 0 to FColumns - 1 do
+  begin
+    for j := 0 to FRows - 1 do
+    begin
+      standard.Cell[i, j] := (Self.Cell[i, j] - average[i]) / std[i];
+    end;
+  end;
+  result := standard;
 end;
 
 function TMatrix.Subtract(matrix: IMatrix): IMatrix;

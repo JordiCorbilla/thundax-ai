@@ -214,4 +214,13 @@ object frmTestMatrix: TfrmTestMatrix
     TabOrder = 4
     OnClick = Button4Click
   end
+  object Button5: TButton
+    Left = 421
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = 'Test PCA'
+    TabOrder = 5
+    OnClick = Button5Click
+  end
 end
