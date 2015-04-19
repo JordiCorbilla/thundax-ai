@@ -189,6 +189,8 @@ begin
   std := matrix.standardisation;
   Display('Standardisation Matrix:');
   Display(std.ToString);
+  Display('Covariance Matrix:');
+  Display(std.Covariance.ToString);
 end;
 
 procedure TfrmTestMatrix.Display(s : string);
