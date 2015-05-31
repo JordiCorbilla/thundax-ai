@@ -3,7 +3,7 @@ object frmTestMatrix: TfrmTestMatrix
   Top = 0
   Caption = 'Thundax Test Matrix'
   ClientHeight = 505
-  ClientWidth = 876
+  ClientWidth = 1228
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -166,10 +166,11 @@ object frmTestMatrix: TfrmTestMatrix
   object Memo1: TMemo
     Left = 8
     Top = 39
-    Width = 860
+    Width = 1212
     Height = 458
+    Color = clBlack
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clLime
     Font.Height = -11
     Font.Name = 'Courier New'
     Font.Style = []
@@ -179,7 +180,7 @@ object frmTestMatrix: TfrmTestMatrix
     WordWrap = False
   end
   object Button1: TButton
-    Left = 793
+    Left = 1145
     Top = 8
     Width = 75
     Height = 25
@@ -188,7 +189,7 @@ object frmTestMatrix: TfrmTestMatrix
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 682
+    Left = 1034
     Top = 8
     Width = 105
     Height = 25
@@ -197,7 +198,7 @@ object frmTestMatrix: TfrmTestMatrix
     OnClick = Button2Click
   end
   object Button3: TButton
-    Left = 592
+    Left = 944
     Top = 8
     Width = 84
     Height = 25
@@ -206,7 +207,7 @@ object frmTestMatrix: TfrmTestMatrix
     OnClick = Button3Click
   end
   object Button4: TButton
-    Left = 502
+    Left = 854
     Top = 8
     Width = 84
     Height = 25
@@ -215,7 +216,7 @@ object frmTestMatrix: TfrmTestMatrix
     OnClick = Button4Click
   end
   object Button5: TButton
-    Left = 421
+    Left = 773
     Top = 8
     Width = 75
     Height = 25

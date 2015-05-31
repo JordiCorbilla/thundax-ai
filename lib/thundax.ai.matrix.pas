@@ -56,6 +56,7 @@ type
     function Distance() : IMatrix;
     function GetCovarianceValue(Column, Row: Integer): Double;
     function GetDistance(Column, Row : Integer) : Double;
+    function Identity() : IMatrix;
   end;
 
   TMatrix = class(TInterfacedObject, IMatrix)
@@ -87,6 +88,7 @@ type
     function Covariance(): IMatrix;
     function Standardisation() : IMatrix;
     function Distance() : IMatrix;
+    function Identity() : IMatrix;
     function ToString(): string; override;
   end;
 
@@ -253,6 +255,21 @@ end;
 function TMatrix.GetRows: Integer;
 begin
   result := FRows;
+end;
+
+function TMatrix.Identity: IMatrix;
+var
+  i, j : integer;
+begin
+  for i := 0 to FColumns - 1 do
+  begin
+    for j := 0 to FRows - 1 do
+    begin
+        Self.Cell[i, j] := 1.0;
+    end;
+  end;
+
+  result := Self;
 end;
 
 procedure TMatrix.Initialise;

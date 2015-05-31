@@ -191,6 +191,10 @@ begin
   Display(std.ToString);
   Display('Covariance Matrix:');
   Display(std.Covariance.ToString);
+
+  matrix := TMatrix.Create(5,5);
+  Display('Identity Matrix');
+  Display(matrix.Identity.ToString);
 end;
 
 procedure TfrmTestMatrix.Display(s : string);
