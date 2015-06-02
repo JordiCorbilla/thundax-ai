@@ -30,7 +30,7 @@ unit thundax.ai.matrix;
 interface
 
 uses
-  thundax.ai.matrix.arraytypes, Generics.collections, Contnrs;
+  thundax.ai.matrix.arraytypes, Generics.collections, Contnrs, thundax.ai.vector;
 
 type
   TMultiArray<T> = Array of array of T;
@@ -49,7 +49,8 @@ type
     property Columns: Integer read GetColumns write SetColumns;
     function Add(matrix: IMatrix): IMatrix;
     function Subtract(matrix: IMatrix): IMatrix;
-    function Multiply(matrix: IMatrix): IMatrix;
+    function Multiply(matrix: IMatrix): IMatrix; overload;
+    function Multiply(vector : IVector<Double>) : IVector<Double>; overload;
     function Mean(): IMatrix;
     function Covariance(): IMatrix;
     function Standardisation() : IMatrix;
@@ -81,7 +82,8 @@ type
     property Cell[x, y: Integer]: Double read GetCell write SetCell;
     function Add(matrix: IMatrix): IMatrix;
     function Subtract(matrix: IMatrix): IMatrix;
-    function Multiply(matrix: IMatrix): IMatrix;
+    function Multiply(matrix: IMatrix): IMatrix; overload;
+    function Multiply(vector : IVector<Double>) : IVector<Double>; overload;
     function Mean(): IMatrix;
     function GetCovarianceValue(Column, Row: Integer): Double;
     function GetDistance(Column, Row : Integer) : Double;
@@ -95,7 +97,7 @@ type
 implementation
 
 uses
-  SysUtils, thundax.ai.matrix.Columns, thundax.ai.vector, thundax.ai.Maths, thundax.ai.layout.text,
+  SysUtils, thundax.ai.matrix.Columns, thundax.ai.Maths, thundax.ai.layout.text,
   System.Classes;
 
 { TMatrix }
@@ -306,6 +308,24 @@ begin
   result := newMatrix;
 end;
 
+function TMatrix.Multiply(vector: IVector<Double>): IVector<Double>;
+var
+  resvector: IVector<double>;
+  i, j: Integer;
+begin
+  if (Self.FColumns <> vector.Length) then
+    raise Exception.Create('Dimension matrix are different');
+  resvector := TVector<double>.create(Self.FColumns);
+  for i := 0 to FRows - 1 do
+  begin
+    for j := 0 to FColumns - 1 do
+    begin
+        resvector.Cell[i] := resvector.Cell[i] + (Self.Cell[i, j] * vector.Cell[j]);
+    end;
+  end;
+  result := resvector;
+end;
+
 function TMatrix.Multiply(matrix: IMatrix): IMatrix;
 var
   i, j, k: Integer;
@@ -413,7 +433,7 @@ end;
 
 function TMatrix.ToString: string;
 begin
-  Result := TTextLayoutDouble.New.FormatText(Self.FRows, Self.FColumns, FMultiArray);
+  Result := TMatrixLayoutDouble.New.FormatText(Self.FRows, Self.FColumns, FMultiArray);
 end;
 
 function TMatrix.Transpose: IMatrix;

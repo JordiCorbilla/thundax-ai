@@ -35,19 +35,29 @@ uses
 type
   TMultiArrayDouble = Array of array of Double;
   TMultiArrayString = Array of array of String;
+  TArrayDouble = Array of Double;
 
-  ITextLayout = interface
+  IMatrixTextLayout = interface
     function FormatText(Rows : integer; columns: integer; MultiArrayIn : variant) : string;
   end;
 
-  TTextLayoutDouble = class(TInterfacedObject, ITextLayout)
-    function FormatText(Rows : integer; columns: integer; MultiArrayIn : variant) : string;
-    class function New: ITextLayout;
+  IVectorTextLayout = interface
+    function FormatText(rows: integer; VectorIn : variant) : string;
   end;
 
-  TTextLayoutString = class(TInterfacedObject, ITextLayout)
+  TMatrixLayoutDouble = class(TInterfacedObject, IMatrixTextLayout)
     function FormatText(Rows : integer; columns: integer; MultiArrayIn : variant) : string;
-    class function New: ITextLayout;
+    class function New: IMatrixTextLayout;
+  end;
+
+  TMatrixLayoutString = class(TInterfacedObject, IMatrixTextLayout)
+    function FormatText(Rows : integer; columns: integer; MultiArrayIn : variant) : string;
+    class function New: IMatrixTextLayout;
+  end;
+
+  TVectorLayoutString = class(TInterfacedObject, IVectorTextLayout)
+    function FormatText(rows: integer; VectorIn : variant) : string;
+    class function New: IVectorTextLayout;
   end;
 
 implementation
@@ -57,7 +67,7 @@ uses
 
 { TTextLayout }
 
-function TTextLayoutDouble.FormatText(Rows: integer; columns: integer; MultiArrayIn : variant): string;
+function TMatrixLayoutDouble.FormatText(Rows: integer; columns: integer; MultiArrayIn : variant): string;
 var
   i, j: Integer;
   sLine, sRowLine: string;
@@ -105,7 +115,7 @@ end;
 
 { TTextLayoutString }
 
-function TTextLayoutString.FormatText(Rows, columns: integer; MultiArrayIn: variant): string;
+function TMatrixLayoutString.FormatText(Rows, columns: integer; MultiArrayIn: variant): string;
 var
   i, j: Integer;
   sLine, sRowLine: string;
@@ -162,12 +172,44 @@ begin
   result := sRowLine;
 end;
 
-class function TTextLayoutDouble.New: ITextLayout;
+class function TMatrixLayoutDouble.New: IMatrixTextLayout;
 begin
   result := Create;
 end;
 
-class function TTextLayoutString.New: ITextLayout;
+class function TMatrixLayoutString.New: IMatrixTextLayout;
+begin
+  result := Create;
+end;
+
+{ TVectorLayoutString }
+
+function TVectorLayoutString.FormatText(rows: integer; VectorIn: variant): string;
+var
+  i: Integer;
+  sLine, sRowLine: string;
+  newString: string;
+  MultiArray : TArrayDouble;
+begin
+  MultiArray := TArrayDouble(VectorIn);
+  sRowLine := '';
+
+  for i := 0 to Rows - 1 do
+  begin
+    sLine := '';
+      if TMathHelper.Compare(MultiArray[i], 0, '>=') then
+        newString := '+' + FloatToStr(MultiArray[i])
+      else
+        newString := FloatToStr(MultiArray[i]);
+      sLine := sLine + newString + StringOfChar(' ', 1 + (Length(newString)));
+
+    sRowLine := sRowLine + sLine + sLineBreak;
+  end;
+  sRowLine := StringReplace(sRowLine, '+', ' ', [rfReplaceAll, rfIgnoreCase]);
+  result := sRowLine;
+end;
+
+class function TVectorLayoutString.New: IVectorTextLayout;
 begin
   result := Create;
 end;

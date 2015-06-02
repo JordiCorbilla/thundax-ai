@@ -195,7 +195,7 @@ end;
 
 function TTable.ToString: string;
 begin
-  Result := TTextLayoutString.New.FormatText(Self.FRows, Self.FColumns, FMultiArray);
+  Result := TMatrixLayoutDouble.New.FormatText(Self.FRows, Self.FColumns, FMultiArray);
 end;
 
 { TListIds }

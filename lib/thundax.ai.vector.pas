@@ -36,6 +36,9 @@ type
     function GetColumns(): Integer;
     procedure SetColumns(Value: Integer);
     property Cell[x: Integer]: T read GetCell write SetCell;
+    property Length: Integer read GetColumns write SetColumns;
+    function Add(values : array of T): IVector<T>;
+    function ToString(): string;
   end;
 
   TVector<T> = class(TInterfacedObject, IVector<T>)
@@ -47,14 +50,29 @@ type
     function GetCell(x: Integer): T;
     procedure SetCell(x: Integer; const Value: T);
   public
+    class function New(Columns: Integer) : IVector<T>;
     property Cell[x: Integer]: T read GetCell write SetCell;
-    property Columns: Integer read GetColumns write SetColumns;
+    property Length: Integer read GetColumns write SetColumns;
     constructor Create(Columns: Integer); overload;
+    function Add(values : array of T): IVector<T>;
+    function ToString(): string; override;
   end;
 
 implementation
 
+uses
+  thundax.ai.layout.text;
+
 { TMatrix }
+
+function TVector<T>.Add(values: array of T): IVector<T>;
+var
+  i : integer;
+begin
+  for I := 0 to High(values) do
+    FMultiArray[i] := values[i];
+  result := Self;
+end;
 
 constructor TVector<T>.Create(Columns: Integer);
 begin
@@ -72,6 +90,11 @@ begin
   result := FColumns;
 end;
 
+class function TVector<T>.New(Columns: Integer): IVector<T>;
+begin
+  result := Create(Columns);
+end;
+
 procedure TVector<T>.SetCell(x: Integer; const Value: T);
 begin
   FMultiArray[x] := Value;
@@ -80,6 +103,11 @@ end;
 procedure TVector<T>.SetColumns(Value: Integer);
 begin
   FColumns := Value;
+end;
+
+function TVector<T>.ToString: string;
+begin
+  Result := TVectorLayoutString.New.FormatText(Self.Length, FMultiArray);
 end;
 
 end.

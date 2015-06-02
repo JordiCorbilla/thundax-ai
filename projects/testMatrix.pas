@@ -59,7 +59,7 @@ var
 implementation
 
 uses
-  thundax.ai.matrix, thundax.ai.matrix.columns, thundax.ai.matrix.bind, thundax.ai.table;
+  thundax.ai.matrix, thundax.ai.matrix.columns, thundax.ai.matrix.bind, thundax.ai.table, thundax.ai.vector;
 
 {$R *.dfm}
 
@@ -181,7 +181,8 @@ end;
 
 procedure TfrmTestMatrix.Button5Click(Sender: TObject);
 var
-  matrix, std: IMatrix;
+  matrix, std, matrix1: IMatrix;
+  vector, vectorres : IVector<Double>;
 begin
   matrix := TMatrix.Create('Wholesale customers.data', ',');
   Display('Matrix:');
@@ -195,6 +196,16 @@ begin
   matrix := TMatrix.Create(5,5);
   Display('Identity Matrix');
   Display(matrix.Identity.ToString);
+
+  Display('Vector:');
+  vector := TVector<Double>.New(3).Add([1, 2, 3]);
+  Display(vector.ToString);
+  Display('Matrix');
+  matrix1 := TBind.New([TColumn.create([2, 3, 4]), TColumn.create([1, 3, 1]), TColumn.create([3, 2, 2])]).matrix;
+  Display(matrix1.ToString);
+  Display('Multiplication');
+  vectorres := matrix1.Multiply(vector);
+  Display(vectorres.ToString);
 end;
 
 procedure TfrmTestMatrix.Display(s : string);
