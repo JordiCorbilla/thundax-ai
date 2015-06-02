@@ -58,6 +58,7 @@ type
     function GetCovarianceValue(Column, Row: Integer): Double;
     function GetDistance(Column, Row : Integer) : Double;
     function Identity() : IMatrix;
+    function Clone() : IMatrix;
   end;
 
   TMatrix = class(TInterfacedObject, IMatrix)
@@ -91,6 +92,7 @@ type
     function Standardisation() : IMatrix;
     function Distance() : IMatrix;
     function Identity() : IMatrix;
+    function Clone() : IMatrix;
     function ToString(): string; override;
   end;
 
@@ -126,6 +128,23 @@ begin
     for j := 0 to FRows - 1 do
       newMatrix.Cell[i, j] := Self.Cell[i, j] + matrix.Cell[i, j];
 
+  result := newMatrix;
+end;
+
+function TMatrix.Clone: IMatrix;
+var
+  i, j: Integer;
+  newMatrix: IMatrix;
+begin
+  newMatrix := TMatrix.Create(FColumns, FColumns);
+
+  for i := 0 to newMatrix.Columns - 1 do
+  begin
+    for j := 0 to newMatrix.Rows - 1 do
+    begin
+      newMatrix.Cell[i, j] := self.Cell[i,j];
+    end;
+  end;
   result := newMatrix;
 end;
 

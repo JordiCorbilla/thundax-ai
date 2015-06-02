@@ -181,7 +181,7 @@ end;
 
 procedure TfrmTestMatrix.Button5Click(Sender: TObject);
 var
-  matrix, std, matrix1: IMatrix;
+  matrix, std, matrix1, matrix2: IMatrix;
   vector, vectorres : IVector<Double>;
 begin
   matrix := TMatrix.Create('Wholesale customers.data', ',');
@@ -206,6 +206,9 @@ begin
   Display('Multiplication');
   vectorres := matrix1.Multiply(vector);
   Display(vectorres.ToString);
+
+  matrix2 := matrix1.Clone;
+  Display(matrix2.ToString);
 end;
 
 procedure TfrmTestMatrix.Display(s : string);
