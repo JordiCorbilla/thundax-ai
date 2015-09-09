@@ -2,6 +2,8 @@ A series of A.I. Algorithms coded in Delphi
 ==============
 **thundax-ai** brings a series of **A.I** (Artificial Intelligence) algorithms (**machine learning**) including examples and other interesting algorithms for **pattern recognition**, **graph theory** and **image processing**.
 --------------
+[![Downloads](https://img.shields.io/badge/downloads-0-blue.svg)]() [![Stable Release](https://img.shields.io/badge/version-1.0-blue.svg)]() [![License](https://img.shields.io/badge/license-GPL-blue.svg)]() [![Delphi version](https://img.shields.io/badge/delphi-xe6-red.svg)]()
+
 **Available machine learning algorithms:**
   - **Decision tree, with pruning**. 
   - **fuzzy c-means**  
